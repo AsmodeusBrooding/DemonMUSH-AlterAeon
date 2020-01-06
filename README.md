@@ -1,2 +1,2 @@
 # DemonMUSH
-DemonMUSH client for Alter Aeon
+Official repository for the DemonMUSH client for Alter Aeon

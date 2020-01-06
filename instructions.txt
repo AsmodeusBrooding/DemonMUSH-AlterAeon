@@ -1,0 +1,14 @@
+Here is the initial git repository for your stuff.
+
+I would recommend that you put your mushclient tree under the
+DemonMUSH directory.  If we do the same thing as with mush-z,
+that will form the basis of your download and update tree.
+
+This root directory will be used for management and other
+stuff.
+
+We only create branches on the main server for major releases.
+HEAD is generally where the most current beta lives.
+
+As with mush-z, the stable updater will update to the most
+recent stable branch, while the beta updater updates to HEAD.

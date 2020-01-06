@@ -1,0 +1,26 @@
+DO NOT DESTROY THIS FILE.  DENTIN PUT IT HERE FOR A REASON.
+
+1) figure out the release date and timestamp, like 130508-01, which is short
+   for '2013 may 8 patch level 1'
+
+2) make sure the version in the SetVariable matches
+   File used to be in mushz/worlds/plugins/AlterAeon.xml
+   Is now in mushz/lua/mushz_version.lua
+
+3) rebuild the sha256 updater files
+
+4) diff and check in code.  Make sure there's no crap/qq temp files in the
+   downloader manifests
+
+5) git push
+
+6) create a release branch.  Example: 'git branch release-130508-01'
+   Make sure to add the 'release-' tag to the date
+
+7) 'git push origin releasebranch'
+
+8) switch to download tree on gitserver, 'git pull', 'git checkout releasebranch'
+
+9) change the version to the SetVariable value using the mud 'version' command.
+
+10) change SetVariable to a new beta value.  Example:  'b-130508-01'

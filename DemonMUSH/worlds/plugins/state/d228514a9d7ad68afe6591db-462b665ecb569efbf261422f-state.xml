@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE muclient>
+<!-- MuClient version 5.06-pre -->
+<!-- Written by Nick Gammon -->
+<!-- Home Page: http://www.mushclient.com/ -->
+
+<!-- Plugin state saved. Plugin: "Miniwindow_Z_Order_Monitor". World: "Demonclient". -->
+
+<muclient>
+
+<!-- variables -->
+
+<variables
+   muclient_version="5.06-pre"
+   world_file_version="15"
+  >
+  <variable name="a48062dcd6b934c590df53f67">3</variable>
+  <variable name="ab555825a4a5700c35fa80780">1</variable>
+  <variable name="add07d6dbe73fe0bd02ddb63d_mapper">4</variable>
+  <variable name="add07d6dbe73fe0bd02ddb63d_z_config_win">5</variable>
+  <variable name="ae2dc05642ff5f4fec6cf039e">2</variable>
+</variables>
+</muclient>

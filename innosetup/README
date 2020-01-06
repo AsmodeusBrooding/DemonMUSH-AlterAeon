@@ -1,0 +1,5 @@
+This directory currently only exists as a placeholder to save the file manifest,
+since that's produced automatically by the manifest builder scripts.
+
+We could build an installer at some point.
+

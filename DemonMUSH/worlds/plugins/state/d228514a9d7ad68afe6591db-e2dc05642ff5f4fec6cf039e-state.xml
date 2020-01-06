@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE muclient>
+<!-- MuClient version 5.06-pre -->
+<!-- Written by Nick Gammon -->
+<!-- Home Page: http://www.mushclient.com/ -->
+
+<!-- Plugin state saved. Plugin: "DemonMUSH_Utility_Window". World: "Demonclient". -->
+
+<muclient>
+
+<!-- variables -->
+
+<variables
+   muclient_version="5.06-pre"
+   world_file_version="15"
+  >
+  <variable name="WINDOW_HEIGHT">272</variable>
+  <variable name="WINDOW_WIDTH">418</variable>
+  <variable name="fontName">Dina</variable>
+  <variable name="fontSize">8</variable>
+  <variable name="mw_e2dc05642ff5f4fec6cf039e_windowx">654</variable>
+  <variable name="mw_e2dc05642ff5f4fec6cf039e_windowy">393</variable>
+</variables>
+</muclient>

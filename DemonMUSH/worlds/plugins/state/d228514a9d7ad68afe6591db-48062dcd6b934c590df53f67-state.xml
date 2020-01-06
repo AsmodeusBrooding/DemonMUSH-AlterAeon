@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE muclient>
+<!-- MuClient version 5.06-pre -->
+<!-- Written by Nick Gammon -->
+<!-- Home Page: http://www.mushclient.com/ -->
+
+<!-- Plugin state saved. Plugin: "DemonMUSH_Big_Gauges". World: "Demonclient". -->
+
+<muclient>
+
+<!-- variables -->
+
+<variables
+   muclient_version="5.06-pre"
+   world_file_version="15"
+  >
+  <variable name="enemy_color">#ff0000</variable>
+  <variable name="exp_color">#9400d3</variable>
+  <variable name="hp_color">#00ff00</variable>
+  <variable name="mana_color">#3333ff</variable>
+  <variable name="moves_color">#ffd700</variable>
+  <variable name="pos_x">0</variable>
+  <variable name="pos_y">554</variable>
+  <variable name="win_height">97</variable>
+  <variable name="win_width">740</variable>
+</variables>
+</muclient>
