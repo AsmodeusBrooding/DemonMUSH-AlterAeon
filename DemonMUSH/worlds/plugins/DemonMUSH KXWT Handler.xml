@@ -28,6 +28,21 @@ Removes KXWT spam from output, colors things, handles sound, and more.
 <triggers>
  <trigger
    enabled="y"
+   match="^\<\d+hp \d+m \d+mv\>$"
+   omit_from_log="y"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>
+  Execute("setup prompt")
+  Execute("look")
+  util.print("{GInitialization Complete, Happy Mudding!")
+  </send>
+  </trigger>
+ <trigger
+   enabled="y"
    match="^kxwt\_time (\d+) ([a-zA-Z]+) (\d+)\:(\d+) (am|pm)$"
    omit_from_log="y"
    omit_from_output="y"
@@ -1069,6 +1084,19 @@ require "utility"
 dofile(GetPluginInfo(GetPluginID(), 20) .. "plugin_colors.lua")
 uid=""
 musicPlaying = false
+version = "6.1"
+
+function setup_prompt()
+Execute("prompt fighting ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W{~WExp: ~G~H%xp~O~W} ~W~H%fi <%fc> (%fp) ~O~W{~W~H%pos~O~W}~O")
+Execute("prompt sleeping ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
+Execute("prompt default ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
+
+end -- function setup_prompt
+
+function setup_prompt_aff()
+Execute("prompt {R[{WLast_Dir: %d {R]%c{c%1[G_End]%c{D| {WRemort: %L {D| {WLevel: %l {D|%c| {wHP:{R%h{D/{r%H{D |{w MP:{B%m{D/{b%M{w {D| {wMV:{Y%v{D/{y%V{D |{w Enemy:{R%o{w {D| {wTNL:{m%X {D| {wSUPER: {C%A{D |{w %c{R[{WRoom{R][{W%C{R]%r%c[Exits: %e]%c[NAME: %n]%c%E%c|BODILYREQUIREMENTS %u %U|%c")
+end -- function setup_prompt
+
 function OnPluginInstall()
 volume = GetVariable("volume") or 100
   uid=GetVariable("id")

@@ -1614,7 +1614,7 @@ function map_find (name, line, wildcards)
   local count = 0
   local target = Trim (wildcards [1]:lower ())
   util.print("{R-------------------------------------------------------")
-  util.print("            ~F~W[~W~HSearching rooms for {F~W'Y~H".. target .. "~F~W']")
+  util.print("            {x238[{WSearching rooms for {x238'{Y".. target .. "{x238']")
   util.print("{R-------------------------------------------------------")
   if target == "" then
     mapper.maperror ("No search string specified")
@@ -1695,7 +1695,7 @@ function note_find (name, line, wildcards)
   local count = 0
   local target = Trim (wildcards [1]:lower ())
     util.print("{R-------------------------------------------------------")
-  util.print("            {D[{WSearching notes for {D'{Y".. target .. "{D']")
+  util.print("            {x238[{WSearching notes for {x238'{Y".. target .. "{x238']")
     util.print("{R-------------------------------------------------------")
   if target == "" then
     mapper.maperror ("No search string specified")
