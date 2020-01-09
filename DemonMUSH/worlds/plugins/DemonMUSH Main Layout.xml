@@ -54,10 +54,9 @@
 <script>
 <![CDATA[
 require "mw_theme_base"
+require "movewindow"
+require "utility"
 
-function OnPluginListChanged()
-   dofile "lua/aard_requirements.lua"
-end
 
 default_top = 140
 default_bottom = 544
@@ -76,24 +75,29 @@ MIN_SIZE         = 50
 require "serialize"
 
 function LayoutHelp()
-   print("")
-   print("DemonMUSH MUSHclient Layout Command Help")
-   print("--------------------------------------------------------------------------------")
-   print("demon layout lock               :  prevent dragging miniwindows")
-   print("demon layout unlock             :  allow dragging miniwindows")
-   print("demon layout save <keyword>     :  store the current layout as the given keyword")
-   print("demon layout restore <keyword>  :  restore the layout for the given keyword")
-   print("demon layout forget <keyword>   :  forget the layout for the given keyword")
-   print("demon layout list               :  list all stored layout keywords")
-   print("demon layout help               :  show this command help")
-   print("demon layout reset              :  like resetdemon, but better")
-   print("")
+   util.print("")
+   util.print("                       {RD{re{Rm{ro{Rn{YM{yU{YS{yH {x238Layout Command Help")
+   util.print("{R--------------------------------------------------------------------------------")
+   util.print("{Ydemon layout lock               {R:  {Wprevent dragging miniwindows")
+   util.print("{Ydemon layout unlock             {R:  {Wallow dragging miniwindows")
+   util.print("{Ydemon layout save <keyword>     {R:  {Wstore the current layout as the given keyword")
+   util.print("{Ydemon layout restore <keyword>  {R:  {Wrestore the layout for the given keyword")
+   util.print("{Ydemon layout forget <keyword>   {R:  {Wforget the layout for the given keyword")
+   util.print("{Ydemon layout list               {R:  {Wlist all stored layout keywords")
+   util.print("{Ydemon layout help               {R:  {Wshow this command help")
+   util.print("{Ydemon layout reset              {R:  {Wlike resetdemon, but better")
+   util.print("{R--------------------------------------------------------------------------------")
+   util.print("")
    LockStatus()
-   print("")
+   util.print("")
 end
 
 function LockStatus()
-   print("Current layout lock status:", ((GetVariable("lock_down_miniwindows") == "1") and "LOCKED") or "UNLOCKED")
+if GetVariable("lock_down_miniwindows") == "1" then 
+   util.print("{YCurrent layout lock status:{R LOCKED")
+else
+   util.print("{YCurrent layout lock status:{G UNLOCKED")
+end
 end
 
 function LayoutCommand(name, line, wildcards)

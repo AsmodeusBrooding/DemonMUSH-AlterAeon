@@ -12,7 +12,7 @@
    author="Demon"
    id="04d9e64f835453c045b427a7"
    language="Lua"
-   purpose="Removes Kxwt spam"
+   purpose="Multipurpose Utility"
    save_state="y"
    date_written="2019-01-04"
    requires="4.00"
@@ -20,7 +20,7 @@
    >
 
 <description trim="y">
-Removes KXWT spam from output
+Removes KXWT spam from output, colors things, handles sound, and more.
 
 </description>
 
@@ -712,13 +712,43 @@ ColourNote("lime", "black", "| DOUBLE CAP MODE ENABLED |")
 ColourNote("lime", "black", "---------------------------")
 </send>
   </trigger>
-
+</triggers>
 
 
 
 -----------------------------------------------------------------------------------
--- SOUND TRIGGERS SECTION 
+-- SOUNDS SECTION 
 -----------------------------------------------------------------------------------
+  <aliases>
+  <alias
+   name="volumesetting"
+   match="^vol(|u|um|ume) (?P<volumenumber>\d+)$"
+   regexp="y"
+   ignore_case="y"
+   send_to="12"
+   enabled="y"
+   sequence="100"
+  >
+<send>
+Sound("volume=%2")
+volume = %2
+SetVariable("volume", volume)
+--print("Volume: ", volume)
+util.print("~Y~HVolume changed to ~R~H" .. (GetVariable("volume") or 100) .. "~Y~H percent.")
+   SaveState()
+</send>
+</alias> 
+<alias
+ enabled="y"
+ match="show volume"
+ regexp="n"
+ send_to="12"
+ sequence="100">
+ <send>util.print("{YThe current volume is{R " .. (GetVariable("volume") or 100))
+ </send>
+ </alias>
+</aliases>
+<triggers>
  <trigger
  enabled="y"
  match="* tells you, '*'"
@@ -881,6 +911,7 @@ Sound ("sounds/death.mp3")
 </send>
  </trigger>
 
+
 ------------------------------------------------------------------------------------
 -- MUSIC SECTION
 ------------------------------------------------------------------------------------
@@ -1006,120 +1037,7 @@ lagbrag="%1"
 Send("ping")
 </send>
  </alias>
-------------------------------------------------------------------------------------
--- SOUND ALIAS SECTION 
-------------------------------------------------------------------------------------
 
-  <alias
-   match="volume 0"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=0")
-   ColourNote ("yellow", "", "Volume changed to 0.")
-</send>
-</alias>
-  <alias
-   match="volume 10"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=10")
-   ColourNote ("yellow", "", "Volume changed to 10.")
-</send>
-</alias>
-  <alias
-   match="volume 20"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=20")
-   ColourNote ("yellow", "", "Volume changed to 20.")
-</send>
-</alias>
-  <alias
-   match="volume 30"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=30")
-   ColourNote ("yellow", "", "Volume changed to 30.")
-</send>
-</alias>
-  <alias
-   match="volume 40"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=40")
-   ColourNote ("yellow", "", "Volume changed to 40.")
-</send>
-</alias>
-  <alias
-   match="volume 50"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=50")
-   ColourNote ("yellow", "", "Volume changed to 50.")
-</send>
-</alias>
-  <alias
-   match="volume 60"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=60")
-   ColourNote ("yellow", "", "Volume changed to 60.")
-</send>
-</alias>
-  <alias
-   match="volume 70"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=70")
-   ColourNote ("yellow", "", "Volume changed to 70.")
-</send>
-</alias>
-  <alias
-   match="volume 80"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=80")
-   ColourNote ("yellow", "", "Volume changed to 80.")
-</send>
-</alias>
-  <alias
-   match="volume 90"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=90")
-   ColourNote ("yellow", "", "Volume changed to 90.")
-</send>
-</alias>
-  <alias
-   match="volume 100"
-        send_to="12"
-   enabled="y"
-   sequence="100"
-  >
-<send>Sound("volume=100")
-   ColourNote ("yellow", "", "Volume changed to 100.")
-</send>
-</alias>
   <alias
    match="DemonMUSH Help"
         send_to="12"
@@ -1147,9 +1065,12 @@ Send("ping")
 
 <script>
 <![CDATA[
+require "utility"
+dofile(GetPluginInfo(GetPluginID(), 20) .. "alter_colors.lua")
 uid=""
 musicPlaying = false
 function OnPluginInstall()
+volume = GetVariable("volume") or 100
   uid=GetVariable("id")
   if(uid==NIL) then
     uid=GetUniqueID ()
@@ -1169,70 +1090,29 @@ function random(num1, num2)
 	return randomNumber
 end
 
+-------------------------------------------------------------------------------------------------------------------------------
+---- HELP PAGES SECTION 
+-------------------------------------------------------------------------------------------------------------------------------
+
 function demonhelp()
-ColourTell ("white", "black", "                               ^",
-"red", "black", ".",
-"white", "black", "_",
-"red", "black", ".",
-"white", "black", "^",
-"white", "black", " DemonMUSH Helper ",
-"white", "black", "^",
-"red", "black", ".",
-"white", "black", "_",
-"red", "black", ".",
-"white", "black", "^ ")
-ColourTell ("darkviolet", "black", "\n+-----------------+-----------------+-----------------+-----------------+-----------------+")
-ColourTell (
-"gainsboro","black", "            Welcome to the DemonMUSH graphical client designed for Alter Aeon.",
-"gainsboro","black", "\n     These pages are designed to help you with the many features built into the client." ,       
-"gainsboro","black", "\n  These are the modules and features currently available, and the commands are in yellow." )                                                                          
-ColourTell (
-"dimgray", "black", "\n\n    [",
-"mediumpurple","black", "Status Gauges: ",
-"yellow","black", "Gauge Help",
-"dimgray", "black", "]  [",
-"mediumpurple","black", "Utility Window: ",
-"yellow","black", "Utility Help",
-"dimgray", "black", "]",
-"dimgray", "black", "  [",
-"mediumpurple","black", "Chat Window: ",
-"yellow","black", "Chat Help",
-"dimgray", "black", "]")   
-ColourTell (
-"dimgray", "black", "\n\n    [",
-"mediumpurple","black", "Group Window: ",
-"yellow","black", "Demon Group Help",
-"dimgray", "black", "]  [",
-"mediumpurple","black", "Exp Tracker: ",
-"yellow","black", "Track Help",
-"dimgray", "black", "]  [",
-"mediumpurple","black", "Themes: ",
-"yellow","black", "    Theme Help",
-"dimgray", "black", "]")   
-ColourTell (
-"dimgray", "black", "\n\n    [",
-"mediumpurple","black", "Demon Auction: ",
-"yellow","black", "DemonAuc Help",
-"dimgray", "black", "]  [",
-"mediumpurple","black", "Waypoints: ",
-"yellow","black", " Waypoint Help",
-"dimgray", "black", "]  [",
-"mediumpurple","black", "Sound: ",
-"yellow","black", "     Sound Help",
-"dimgray", "black", "]")   
-ColourTell (
-"dimgray", "black", "\n\n    [",
-"mediumpurple","black", "MobKill Counter: ",
-"yellow","black", "Mobkill Help",
-"dimgray", "black", "]  [",
-"mediumpurple","black", "Main Layout: ",
-"yellow","black", "Layout Help",
-"dimgray", "black", "]  [",
-"mediumpurple","black", "Credits: ",
-"yellow","black", "Demon Credits",
-"dimgray", "black", "]")  
- 
-ColourTell ("darkviolet", "black", "\n+-----------------+-----------------+-----------------+-----------------+-----------------+")
+      util.print("~R~H----------------------------------------------------------------------------------")
+      util.print("~W~HClient Name  : {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Client")
+      util.print("~W~HAuthors      : {DAsmodeus, Elisius")
+      util.print("~W~HVersion      : {G" .. version)
+      util.print("~R~H----------------------------------------------------------------------------------")
+      util.print("~O~W      Thank you for choosing {YC{yl{Ye{yf{Yt{RM{rU{RS{rH{w. The following guide will assist you ")
+      util.print("~O~W      with any needs you might have with the client. There are tons of cool ")
+      util.print("~O~W      features, so if you forget any of the commands, please refer to these")
+      util.print("~O~W      pages. Type one of the following options inside the brackets for help")
+      util.print("")
+      util.print("")
+	  util.print(" ~D[~x099Map Window{D: {Ymapper help{D] ~D[~x099Chat Window~D: ~Y~Hchat help~D] ~D[~x099Affects Window~D: ~Y~Haffect help~D] ")
+	  util.print("")
+	  util.print(" ~D[~x099Action Bar~D: ~Y~Haction help~D] ~D[~x099Code Credit~D:   ~Y~Hcredits~D] ~D[~x099Main Output~D:    ~Y~Houtput help~D]")
+	  util.print("")
+	  util.print(" ~D[~x099MW Layout~D:  ~Y~Hwindow help~D] ~D[~x099Change Theme~D:  ~Y~Htheme change~D]")
+      util.print("~D----------------------------------------------------------------------------------")
+      util.print("")
 end
 ]]>
 </script>
