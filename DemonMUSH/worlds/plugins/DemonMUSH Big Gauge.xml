@@ -51,13 +51,19 @@ Written HEAVILY by Fiendish and Lasher, modified by Asmodeus and Elisius
 <triggers>
   <trigger
    enabled="y"
-   match="^kxwt_prompt (\d+)\s* (\d+)\s* (\d+)\s* (\d+)\s* (\d+)\s* (\d+)\s*$"
+   name="kxwt_prompt"
+   match="^kxwt_prompt (?P<hp>(\d+))\s* (?P<max_hp>(\d+))\s* (?P<mana>(\d+))\s* (?P<max_mana>(\d+))\s* (?P<move>(\d+))\s* (?P<max_move>(\d+))\s*$"
    regexp="y"
    script="DisplayStatsPage"
    sequence="100"
    send_to="14"
   >
-<send>WindowShow (win, ShowWindow)</send>
+<send>
+enemy = GetTriggerWildcard ("fighting", "enemy") or 0 -- get wildcard named enemy
+max_hp = GetTriggerWildcard ("kxwt_prompt", "max_hp") or 0 -- get wildcard named enemy
+max_mana = GetTriggerWildcard ("kxwt_prompt", "max_mana") or 0 -- get wildcard named enemy
+max_move = GetTriggerWildcard ("kxwt_prompt", "max_move") or 0 -- get wildcard named enemy
+WindowShow (win, ShowWindow)</send>
   </trigger>
  <trigger
    enabled="y"
@@ -98,21 +104,21 @@ WindowShow (win, ShowWindow)
    sequence="100"
   >
   <send>max_exp = tostring("%1")
-     DisplayStatsPage ("", "", { hp, max_hp, mana, max_mana, move, max_move, enemy, max_enemy } )
      WindowShow (win, ShowWindow)
   </send>
   </trigger>
 <trigger
    enabled="y"
    keep_evaluating="y"
-   match="<*hp *m *mv> {Exp: *} * <*> (*) {*}"
-   regexp="n"
+   name="fighting"
+   match="\<(?P<hp>\d+)hp (?P<mana>\d+)m (?P<move>\d+)mv\> \{Exp: (?P<exp>\d+)\}\s+.*\s+\<.*\> \((?P<enemy>\d+)\) {.*}"
+   regexp="y"
+   script="DisplayStatsPage"
    send_to="14"
    sequence="100"
   >
-  <send>enemy = tonumber("%7")
-   DisplayStatsPage ("", "", { hp, max_hp, mana, max_mana, move, max_move, exp, max_exp, enemy, max_enemy } )
-   WindowShow (win, ShowWindow)
+  <send>
+  fighting = true
   </send>
   </trigger>
 <trigger
@@ -123,8 +129,9 @@ WindowShow (win, ShowWindow)
    send_to="14"
    sequence="100"
   >
-  <send>enemy = tonumber("%7")
-   DisplayStatsPage ("", "", { hp, max_hp, mana, max_mana, move, max_move, enemy, max_enemy } )
+  <send>
+  fighting = true
+  enemy = tonumber("%7")
   </send>
   </trigger>
 <trigger
@@ -136,6 +143,7 @@ WindowShow (win, ShowWindow)
   >
   <send>
      exp = tonumber("%6")
+   WindowShow (win, ShowWindow)
   </send>
   </trigger>
 <trigger
@@ -146,7 +154,9 @@ WindowShow (win, ShowWindow)
    send_to="14"
    sequence="100"
   >
-  <send>enemy = tonumber("%1")
+  <send>
+  fighting = true
+  enemy = tonumber("%1")
   </send>
   </trigger>
 <trigger
@@ -158,6 +168,7 @@ WindowShow (win, ShowWindow)
    sequence="100"
   >
   <send>enemy = 0
+  fighting = false
   </send>
   </trigger>
 <trigger
@@ -230,7 +241,7 @@ remorts = "0"
 max_exp = "10000000"
 no_enemy=0
 max_enemy=100
-enemy="0"
+enemy="0" or nil
 show_mana=true
 super = 0
 max_super = 100
@@ -261,6 +272,7 @@ return
     WindowShow (win, ShowWindow)
 	end
 end
+
 
 string.lpad = function(str, len, char)
    str = tostring(str)
@@ -310,6 +322,16 @@ function validate_percent(input)
    end
    return true
 end
+
+--function fightgauge(name, line, wildcards)
+--   if wildcards ~= nil then
+--      enemy = wildcards [7]
+--	  end
+--fighting = true
+--max_enemy=100
+--gauge(win,showBar[bar][3],enemy,max_enemy,xpos+label_width,ypos,bar_width,line_height,showBar[bar][4],0x000000,bar_ticks,0xFFFFFF,showBar[bar][5],nil,flat_gauges==1)
+--   CallPlugin("abc1a0944ae4af7586ce88dc", "BufferedRepaint")
+--   end
 
 function DoNextSimpleBar(bar, current, max, flip, stacked_label, unstacked_label)
    txt = ""
@@ -380,9 +402,12 @@ local hp, max_hp, mana, max_mana, move, max_move
 function DisplayStatsPage(name, line, wildcards)
    if wildcards ~= nil then
       page_built = true
-      hp, max_hp = wildcards [1], wildcards [2]
-      mana, max_mana = wildcards [3], wildcards [4]
-      move, max_move = wildcards [5], wildcards [6]
+      hp = wildcards.hp
+	  mana = wildcards.mana
+	  move = wildcards.move
+	  max_hp = GetTriggerWildcard ("kxwt_prompt", "max_hp") or 0 -- get wildcard named enemy
+      max_mana = GetTriggerWildcard ("kxwt_prompt", "max_mana") or 0 -- get wildcard named enemy
+      max_move = GetTriggerWildcard ("kxwt_prompt", "max_move") or 0 -- get wildcard named enemy
    end
    WindowRectOp(win, 2, 0, 0, 0, 0, Theme.PRIMARY_BODY) -- blank
    if not page_built then
@@ -442,10 +467,9 @@ function DisplayStatsPage(name, line, wildcards)
       end
       bar = "Enemy"
       if (showBar[bar][2] == true) then
-         fighting = true --gmcp_char.status.enemy
-         if fighting ~= "" then
-        --    enemypct = 0--gmcp_char.status.enemypct
-            if enemy ~= "0" then
+           if fighting == true then
+            if enemy ~= nil then
+	  enemy = wildcards.enemy or enemy
                if showLabels == 1 then
                   if stacked == 1 then
                      WindowText(win, font_id, showBar[bar][1], xpos,  ypos, 0, 0, showBar[bar][4], false)
