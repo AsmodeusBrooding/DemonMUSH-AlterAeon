@@ -188,13 +188,13 @@ end -- build_room_info
 
 -- assorted colours
 --Note ("OURROOMCOLOR", GetPluginVariable("7c54b861a8cd3c4745c28834", "OUR_ROOM_COLOUR"))
-OUR_ROOM_COLOUR               = { name = "Our Room Colour",  colour =  tonumber(GetPluginVariable("7c54b861a8cd3c4745c28834", "OUR_ROOM_COLOUR")) or 0xFF }
+OUR_ROOM_COLOUR               = { name = "Our Room Colour",  colour =  tonumber(GetPluginVariable("dd07d6dbe73fe0bd02ddb63d", "OUR_ROOM_COLOUR")) or 0xFF }
 -- assorted colours
 BACKGROUND_COLOUR             = { name = "Area Background",  colour =  ColourNameToRGB "#111111"}
 ROOM_COLOUR                   = { name = "Room",             colour =  ColourNameToRGB "#dcdcdc"}
 EXIT_COLOUR                   = { name = "Exit",             colour =  ColourNameToRGB "#e0ffff"}
 EXIT_COLOUR_UP_DOWN           = { name = "Exit up/down",     colour =  ColourNameToRGB "#ffb6c1"}
-ROOM_NOTE_COLOUR              = { name = "Room notes",       colour =  ColourNameToRGB "lightgreen"}
+NOTE_ROOM_COLOUR              = { name = "Room notes",       colour =  tonumber(GetPluginVariable("dd07d6dbe73fe0bd02ddb63d", "NOTE_ROOM_COLOUR")) or 0x90EE90 }
 OUR_ROOM_COLOUR               = { name = "Our room",         colour =  ColourNameToRGB "red"}
 UNKNOWN_ROOM_COLOUR           = { name = "Unknown room",     colour =  ColourNameToRGB "#8b0000"}
 DIFFERENT_AREA_COLOUR         = { name = "Another area",     colour =  ColourNameToRGB "#ff0000"}
@@ -247,7 +247,8 @@ default_config = {
    SHOW_ROOM_ID = false,
    SHOW_ROOM_NOTES = false,
    --SHOW_TILES = GetPluginVariable("dd07d6dbe73fe0bd02ddb62c", "tile_mode") or "1",
-SHOW_AREA_EXITS = false
+SHOW_AREA_EXITS = false,
+SHOW_DOOR_EXITS = false
 }
 
 local expand_direction = {
@@ -531,6 +532,22 @@ local function draw_configuration ()
       "Click to toggle display of area exits",
       miniwin.cursor_hand, 0)  -- hand cursor
    y = y + font_height
+   
+            -- show door exits
+   WindowText(config_win, CONFIG_FONT_ID, "Show Door Exits", x, y, 0, 0, 0x000000)
+   WindowText(config_win, CONFIG_FONT_ID_UL, ((config.SHOW_DOOR_EXITS and "On") or "Off"), width + rh_size / 2 + box_size - WindowTextWidth(config_win, CONFIG_FONT_ID_UL, ((config.SHOW_DOOR_EXITS and "On") or "Off"))/2, y, 0, 0, 0x808080)
+   
+     -- show door exits hotspot
+   WindowAddHotspot(config_win,
+      "$<door_exits>",
+      x + GAP,
+      y,
+      x + frame_width,
+      y + font_height,   -- rectangle
+      "", "", "", "", "mapper.mouseup_change_show_door_exits",  -- mouseup
+      "Click to toggle display of door exits",
+      miniwin.cursor_hand, 0)  -- hand cursor
+   y = y + font_height
 
 
    -- room size
@@ -770,8 +787,9 @@ local function draw_room (uid, path, x, y)
 
      local special_room = false
    -- DRAW MAP IMAGES
+   tile_mode = GetPluginVariable("dd07d6dbe73fe0bd02ddb63d", "tile_mode") or "1" 
 
-                             if room.fillcolour and room.fillcolour ~= "" then
+                             if room.fillcolour and room.fillcolour ~= "" and tile_mode == "1" then
 
    	                         if string.match (room.fillcolour, "9109504") then
           WindowDrawImage (win, "ocean", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
@@ -914,8 +932,11 @@ local function draw_room (uid, path, x, y)
                                       room.borderpen, room.borderpenwidth,-2,miniwin.brush_null)
 end
 end
-
-
+			             if uid == current_room and not special_room and tile_mode == "0" then
+                                         WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                         right+2+room.borderpenwidth, bottom+2+room.borderpenwidth, OUR_ROOM_COLOUR.colour,
+                                         room.borderpen, room.borderpenwidth,-2,miniwin.brush_null)		
+end
 
 end -- draw_room
 
@@ -975,6 +996,14 @@ local function draw_zone_exit (exit)
    WindowLine (win, x + def.x1, y + def.y1, x + def.x2, y + def.y2, ColourNameToRGB("green"), miniwin.pen_solid + 0x0200, 1)
 end --  draw_zone_exit
 
+local function draw_doors_exit (exit)
+   local x, y, def = exit.x, exit.y, exit.def
+   local offset = ROOM_SIZE
+
+   WindowLine (win, x + def.x1, y + def.y1, x + def.x2, y + def.y2, ColourNameToRGB("yellow"), miniwin.pen_solid + 0x0200, 5)
+   WindowLine (win, x + def.x1, y + def.y1, x + def.x2, y + def.y2, ColourNameToRGB("green"), miniwin.pen_solid + 0x0200, 1)
+end --  draw_doors_exit
+
 
 ----------------------------------------------------------------------------------
 --  EXPOSED FUNCTIONS
@@ -1024,7 +1053,9 @@ function draw_next_batch_of_rooms()
       end -- for each existing room
       depth = depth + 1
       if (#rooms_to_draw_next > 0 and utils.timer()-draw_elapsed > 0.08) then
-         if not running then
+	  		 print("NOT CURRENT_SPEEDWALK")
+         if not current_speedwalk then
+		 --current_speedwalk
             AddTimer("draw_next_batch_of_rooms"..depth, 0, 0, 0.1, "mapper.draw_next_batch_of_rooms()", timer_flag.Enabled + timer_flag.OneShot + timer_flag.Replace + timer_flag.Temporary, "")
             SetTimerOption("draw_next_batch_of_rooms"..depth, "send_to", sendto.script)
          end
@@ -1300,7 +1331,7 @@ function draw (uid)
 
    -- set up for initial room, in middle
   -- set up for initial room, in middle
-  drawn, drawn_coords, rooms_to_be_drawn, speedwalks, plan_to_draw, area_exits = {}, {}, {}, {}, {}, {}
+  drawn, drawn_coords, rooms_to_be_drawn, speedwalks, plan_to_draw, area_exits, door_exits = {}, {}, {}, {}, {}, {}, {}
   depth = 0
 
    -- insert initial room
@@ -1420,7 +1451,7 @@ function draw (uid)
    local end_time = utils.timer ()
 
    -- timing stuff
-   if timing then
+ --  if timing then
       local count= 0
       for k in pairs (drawn) do
          count = count + 1
@@ -1433,8 +1464,8 @@ function draw (uid)
       print (string.format ("Total times map drawn = %i, average time to draw = %0.3f seconds",
          total_times_drawn,
          total_time_taken / total_times_drawn))
-		             draw_next_batch_of_rooms()
-   end -- if
+		         --    draw_next_batch_of_rooms()
+   --end -- if
 
    -- let them move it around
    movewindow.add_drag_handler (win, 0, 0, 0, title_bottom)
@@ -1477,6 +1508,7 @@ function init (t)
    show_other_areas = t.show_other_areas  -- true to show other areas
    show_up_down = t.show_up_down        -- true to show up or down
    show_area_exits = t.show_area_exits  -- true to show area exits
+   show_door_exits = t.show_door_exits  -- true to show area exits
    speedwalk_prefix = t.speedwalk_prefix  -- how to speedwalk (prefix)
 
    -- force some config defaults if not supplied
@@ -2059,13 +2091,13 @@ end -- mouseup_change_area_textures
 function mouseup_change_show_tiles (flags, hotspot_id)
    if config.SHOW_TILES == true then
       config.SHOW_TILES = false
-	  CallPlugin("dd07d6dbe73fe0bd02ddb62c", "SetVariable", "tile_mode", "0")
+	  CallPlugin("dd07d6dbe73fe0bd02ddb63d", "SetVariable", "tile_mode", "0")
 	  SaveState()
 	  draw (current_room)
-
+	  
    else
       config.SHOW_TILES = true
-	 CallPlugin("dd07d6dbe73fe0bd02ddb62c", "SetVariable", "tile_mode", "1")
+	 CallPlugin("dd07d6dbe73fe0bd02ddb63d", "SetVariable", "tile_mode", "1")
 	 SaveState()
 	 draw (current_room)
    end
@@ -2080,6 +2112,15 @@ function mouseup_change_show_area_exits (flags, hotspot_id)
    end
    draw (current_room)
 end -- mouseup_change_area_textures
+
+function mouseup_change_show_door_exits (flags, hotspot_id)
+   if config.SHOW_DOOR_EXITS == true then
+      config.SHOW_DOOR_EXITS = false
+   else
+      config.SHOW_DOOR_EXITS = true
+   end
+   draw (current_room)
+end -- mouseup_show_door_Exits
 
 function zoom_map (flags, hotspot_id)
    if bit.band (flags, 0x100) ~= 0 then

@@ -4,11 +4,12 @@
 <!-- MuClient version 4.51 -->
 <!DOCTYPE muclient [
   <!ENTITY show_vnums "true" >
-  <!ENTITY show_timing "false" >
+  <!ENTITY show_timing "true" > 
   <!ENTITY show_completed "false" >
   <!ENTITY show_database_mods "true" >
   <!ENTITY show_other_areas "true" >
   <!ENTITY show_area_exits "true" >
+    <!ENTITY show_door_exits "true" > 
   <!ENTITY show_up_down "false" >
   <!ENTITY speedwalk_prefix "" >
 ]>
@@ -52,6 +53,281 @@
    script="mapper.zoom_in"
   >
   </alias>
+<alias
+   match="^mapper addnote( .*)?$"
+   regexp="y"
+   enabled="y"
+   sequence="100"
+   send_to="12"
+>
+<send>
+   room_edit_note(nil,nil,Trim("%1"))
+</send>
+</alias>
+   <alias
+      match="^mapper shownotes( (on|off))?$"
+      regexp="y"
+      enabled="y"
+      sequence="100"
+      script="shownote_toggle"
+   ></alias>
+<alias
+   match="^mapper next( .*)?$"
+   enabled="y"
+   regexp="y"
+   sequence="100"
+   send_to="12"
+>
+<send>
+mapper.gotoNextResult(Trim("%1"))
+</send>
+</alias>
+
+ <alias
+   match="mapper resume"
+   enabled="y"
+   sequence="100"
+   script="map_resume"
+  >
+ 
+  </alias>  
+ <alias
+   match="go"
+   enabled="y"
+   sequence="100"
+   script="map_resume"
+  >
+ 
+  </alias>  
+ <alias
+   match="mapper stop"
+   enabled="y"
+   sequence="100"
+   script="mapper.cancel_speedwalk"
+  >
+  </alias>
+ <alias
+   match="stop"
+   enabled="y"
+   sequence="100"
+   script="mapper.cancel_speedwalk"
+  >
+  </alias>
+  <alias
+   match="^mapper print uid$"
+   regexp="y"
+   enabled="y"
+   sequence="100"
+   send_to="14"
+  >
+<send>util.print("{WRoom UID: {G" .. current_room)</send>
+  </alias>
+  <alias
+   match="^mapper print$"
+   regexp="y"
+   enabled="y"
+   sequence="100"
+   send_to="14"
+  >
+<send>
+util.print("{R--------------------------------------------------")
+   AnsiNote(ColoursToANSI(" {WRoom UID: {Y"..current_room.."{R"))
+   AnsiNote(ColoursToANSI(" {WName: {Y"..name.."{R"))
+   AnsiNote(ColoursToANSI(" {WTerrain: {Y"..terrain.."{R"))
+   AnsiNote(ColoursToANSI(" {WExits: {Y"..printexits.."{R"))
+   AnsiNote(ColoursToANSI(" {WCurrent Area: {Y"..current_area.."{R"))
+   local info
+   if (rooms[uid] ~= nil and rooms[uid].info ~= nil and rooms[uid].info ~= "") then
+      info = rooms[uid].info
+   else
+      info = " No flags"
+   end
+   AnsiNote(ColoursToANSI(" {WRoom Flags: {Y"..info.."{R"))
+util.print("{R--------------------------------------------------")
+</send>
+  </alias>
+  <!-- MAPPER CEXIT STUFF -->
+   <alias
+      match="^mapper cexit (.+)$"
+      enabled="y"
+      sequence="100"
+      script="custom_exit"
+      regexp="y"
+   ></alias>
+   <alias
+      match="^mapper cexit_wait (.+)$"
+      enabled="y"
+      sequence="100"
+      script="change_cexit_delay"
+      regexp="y"
+   ></alias>
+   <alias
+      match="mapper cexits *"
+      enabled="y"
+      sequence="100"
+      script="custom_exit_list"
+      regexp="n"
+   ></alias>
+
+   <alias
+      match="mapper cexits"
+      enabled="y"
+      sequence="100"
+      script="custom_exit_list"
+      regexp="n"
+   ></alias>
+   <alias
+      match="^mapper delete cexits$"
+      enabled="y"
+      sequence="100"
+      script="map_cexits_delete"
+      regexp="y"
+   ></alias>
+
+ <!--  show/hide mapper -->
+
+  <alias
+   match="mapper hide"
+   enabled="y"
+   sequence="100"
+   script="mapper.hide"
+  >
+  </alias>
+
+   <alias
+   match="mapper show"
+   enabled="y"
+   sequence="100"
+   script="mapper.show"
+  >
+  </alias>
+
+<alias
+   match="^mapper updown$"
+   enabled="y"
+   regexp="y"
+   send_to="12"
+>
+<send>
+   mapper.show_up_down = not mapper.show_up_down
+   mapper.draw (current_room)
+</send>
+</alias>
+
+<alias
+   match="^mapper underlines?$"
+   enabled="y"
+   regexp="y"
+   send_to="12"
+>
+<send>
+   NoUnderline_hyperlinks = not NoUnderline_hyperlinks
+   Note("Mapper hyperlinks will " ..(NoUnderline_hyperlinks and "no longer" or "now").." be underlined.")
+   SetVariable("NoUnderline_hyperlinks", NoUnderline_hyperlinks and "1" or "0")
+</send>
+</alias>
+<alias
+   match="^mapper config roomcolor$"
+   enabled="y"
+   regexp="y"
+   send_to="14"
+><send>config_our_room_colour()</send></alias>
+<alias
+   match="^mapper config notecolor$"
+   enabled="y"
+   regexp="y"
+   send_to="14"
+><send>config_note_colour()</send></alias>
+ <alias
+   match="mapper goto *"
+   enabled="y"
+   sequence="100"
+   script="map_goto"
+  >
+  </alias>
+<alias
+   match="mapper find *"
+   ignore_case="y"
+   enabled="y"
+   sequence="100"
+   script="map_find"
+   regexp="n"
+></alias>
+<alias
+   match="note find *"
+   ignore_case="y"
+   enabled="y"
+   sequence="100"
+   script="note_find"
+   regexp="n"
+></alias>
+<alias
+   match="find *"
+   ignore_case="y"
+   enabled="y"
+   sequence="100"
+   script="map_find"
+   regexp="n"
+></alias>
+<alias
+   match="mapper findpath * *"
+   enabled="y"
+   sequence="100"
+   omit_from_output="y"
+   script="findpathfast"
+></alias>
+
+  <alias
+   match="mapper where *"
+   enabled="y"
+   sequence="100"
+   script="map_where"
+  >
+  </alias>
+  <alias
+   match="mapper backup"
+   enabled="y"
+   sequence="100"
+   script="backup_db"
+  >
+  </alias>
+  <alias
+   match="^mapper delete room (\d\w+)$"
+   enabled="y"
+   regexp="y"
+   script="delete_room_alias"
+>
+</alias>
+<alias
+   match="^mapper delete area (.+)$"
+   enabled="y"
+   regexp="y"
+   script="delete_area_alias"
+>
+</alias>
+
+
+<alias
+  match="^mapper flags? (.*)$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  script="updateRoomInfo">
+</alias>
+<alias
+  match="^mapper uid$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  script="updateRoomUid">
+</alias>
+<alias
+  match="^mapper areaname$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  script="updateRoomArea">
+</alias>
 <alias
    match="mapper thisroom"
    enabled="y"
@@ -123,12 +399,56 @@ mapper.gotoNextResult(Trim("%1"))
    script="mapper.show"
   >
   </alias>
+  
+    <!-- MAPPER HELP STUFF -->
 <alias
-   match="^mapper help( (.*))?$"
-   enabled="y"
-   regexp="y"
-   script="OnHelp"
-></alias>
+  match="^mapper help$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  send_to="14">
+<send>mapperhelp()</send>
+</alias>
+<alias
+  match="^mapper help config$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  send_to="14">
+<send>mapperhelpconfig()</send>
+</alias>
+<alias
+  match="^mapper help exits$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  send_to="14">
+<send>mapperhelpexits()</send>
+</alias>
+<alias
+  match="^mapper help moving$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  send_to="14">
+<send>mapperhelpmoving()</send>
+</alias>
+<alias
+  match="^mapper help utils$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  send_to="14">
+<send>mapperhelputils()</send>
+</alias>
+<alias
+  match="^mapper help flags"
+  enabled="y"
+  regexp="y"
+  sequence="100"
+  send_to="14">
+<send>mapperhelpflags()</send>
+</alias>
 
 <alias
    match="^mapper updown$"
@@ -191,6 +511,22 @@ mapper.gotoNextResult(Trim("%1"))
   >
   </alias>
   <alias
+  match="^mapper draw room$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  send_to="14">
+<send>mapper.draw (uid)</send>
+</alias>
+  <alias
+  match="^mapper delete room$"
+  enabled="y" 
+  regexp="y" 
+  sequence="100"
+  send_to="14">
+<send>delete_room_click()</send>
+</alias>
+  <alias
    match="^mapper delete room (\d+)$"
    enabled="y"
    regexp="y"
@@ -231,6 +567,14 @@ where forges | prefix {Where Forge}
 </send>
 </alias>
 
+   <alias
+      match="^mapper show tile( (on|off))?$"
+      regexp="y"
+      enabled="y"
+      sequence="100"
+      script="tile_show"
+   ></alias>
+   
   <alias
    match="^mapper print$"
    regexp="y"
@@ -255,6 +599,19 @@ util.print("{R--------------------------------------------------")
 util.print("{R--------------------------------------------------")
 </send>
   </alias>
+  
+  <alias
+match="mapper show explored"
+enabled="y"
+sequence="100"
+send_to="14"
+>
+<send>
+cnt = GetVariable("cnt")
+AnsiNote(ColoursToANSI("{YYou have explored {R" .. cnt .. " {Yrooms in the game."))
+--print("Room Count: ", cnt)
+</send>
+</alias>
 
 </aliases>
 
@@ -271,7 +628,7 @@ util.print("{R--------------------------------------------------")
    send_to="14"
    sequence="100"
   >
-<send>waypointtoggle()</send>
+<send>room_toggle_waypoint()</send>
   </trigger>
   <trigger
   enabled="y"
@@ -442,6 +799,7 @@ require "copytable"
 require "wait"
 require "utility"
 require "tprint"
+version = "6.05"
 uid = -999
 current_room=nil
 current_area = -999
@@ -457,6 +815,10 @@ default_height = 335
 local posx = 100
 local posy = 100
 local DIFFERENT_AREA_COLOUR = "#ff0000"
+OUR_ROOM_COLOUR = tonumber(GetVariable("OUR_ROOM_COLOUR")) or 0x0000FF
+NOTE_ROOM_COLOUR = tonumber(GetVariable("NOTE_ROOM_COLOUR")) or 0x90EE90
+shownotes = ((GetVariable("shownotes") or "1") == "1") -- default true
+tile_mode = ((GetVariable("tile_mode") or "1") == "1") -- default true
 areaname = -999
 last_direction_moved = nil
 
@@ -526,43 +888,106 @@ function moved_direction(name, line, args)
 	last_direction_moved = kxwt_dirs[args[1]] or "unk"
 end
 
-------------------------------------------
---Update Town Special Procedure
-------------------------------------------
-
 function updateRoomInfo(name, line, wildcards)
-    local roomtype, room, roomuid, matchFound = wildcards[1], wildcards[2], current_room or 0, false
+   local valid_flags = {
+   ["waypoint"]="waypoint", ["bank"]="bank", ["alchemyguild"]="alchemyguild", 
+   ["priest"]="priest", ["forge"]="forge", ["weaponshop"]="weaponshop", 
+   ["armorshop"]="armorshop", ["petshop"]="petshop", ["itemshop"]="itemshop", 
+   ["foodshop"]="foodshop", ["tavern"]="tavern", ["morgue"]="morgue", ["quest"]="quest", 
+   ["fountain"]="fountain", ["gato"]="gato", ["moti"]="moti", ["inn"]="inn",
+   ["owlite"]="owlite", ["enchanter"]="enchanter", ["mage"]="mage"
+   }
+   
+   local roomtype, room, roomuid, matchFound = wildcards[1], wildcards[2], current_room or 0, false
+   new_flags = {}
+   for word in wildcards[1]:gmatch("%w+") do table.insert(new_flags, word) end
 
-    if room then
-        for i,v in pairs(rooms) do
-            if v.name == Trim(room) then
-                roomuid = i
-                matchFound = true
-                break
-            end
-        end
-    else
-        matchFound = true
-    end
+   local function CheckFlags()
+      for _, v in pairs(new_flags) do
+	 if (valid_flags[v] == nil) then
+	    return false
+	 else
+	    return true
+	 end
+      end
+   end
 
-    if matchFound == true then
-        if not rooms[roomuid].info then
-            rooms[roomuid].info = roomtype
-        else
-            if not string.find(rooms[roomuid].info, roomtype) then
-              rooms[roomuid].info = rooms[roomuid].info .. roomtype
-              add_update_room(roomuid, rooms[roomuid])
-            end
-        end
-        mapper.draw(roomuid)
-    else
-        print("Room not mapped!")
-    end
+   if room then
+      for i,v in pairs(rooms) do
+	 if v.name == Trim(room) then
+	    roomuid = i
+	    matchFound = true
+	    break
+	 end
+      end
+   else
+      matchFound = true
+   end
+
+   if matchFound == true and rooms[roomuid] ~= nil then
+      if (roomtype == "clear") then
+	 rooms[roomuid].info = nil
+	 print("Cleared flags from: ", rooms[roomuid].name)
+	 add_update_room(roomuid, rooms[roomuid])
+      elseif (not rooms[roomuid].info and CheckFlags()) then
+	 rooms[roomuid].info = roomtype
+	 add_update_room(roomuid, rooms[roomuid])
+	 print("Added flags: ", roomtype)
+      elseif (CheckFlags()) then
+	 for k, v in pairs(new_flags) do
+	    rooms[roomuid].info = rooms[roomuid].info .. " " .. v
+	 end
+	 add_update_room(roomuid, rooms[roomuid])
+	 print("Added flags:", roomtype)
+      else
+	 print("Flag:", roomtype, "is not valid")
+      end
+   else
+      print("Room not mapped!")
+   end
+   mapper.draw(roomuid)
 end
 
 -----------------------------------------
 -- DONE ADDING TRIGGER STUFF
 -----------------------------------------
+
+function updateRoomName()
+   newname = utils.inputbox ("Enter new name for " .. current_room, name)
+print("New NAME: ", newname)
+  rooms[current_room].name = newname
+  add_update_room(newname, rooms[current_room])
+print("current_room: ", current_room)
+print("Name: ", name)
+  mapper.draw(current_room)
+end
+function updateRoomArea()
+   newarea = utils.inputbox ("Enter area name for " .. name, name)
+--print("Area Name: ", newarea)
+   rooms[uid].area = newarea
+   add_update_room(current_room, rooms[current_room])
+   --print("Area Name: ", newarea)
+    --  add_update_room(newarea, rooms[area])
+--print("current_room: ", current_room)
+--print("Area: ", area)
+   mapper.draw(current_room)
+end
+function updateRoomUid()
+   newuid = utils.inputbox ("Enter new UID for " .. current_room, uid)
+   print("New UID: ", newuid)
+   update_uid(newuid, uid)
+   rooms[current_room].uid = newuid
+   current_room = newuid
+   print("current_room: ", current_room)
+   print("UID: ", uid)
+   mapper.draw(current_room)
+end
+ 
+function update_uid(newuid, olduid)
+--tprint(rooms[current_room])
+    sql = [[UPDATE rooms SET uid = ']]..newuid..[[' WHERE uid = ']]..olduid..[[']]
+    run_sql(sql)
+end
 
 function room_edit_note(room, vuid, newnotes)
   if vuid == nil and current_room ~= nil then
@@ -616,6 +1041,276 @@ function room_edit_note(room, vuid, newnotes)
   end
 end
 
+function tile_toggle()
+local tile_mode = GetVariable("tile_mode") -- default true
+   if tile_mode == "0" then
+Execute("mapper show tile on")
+   -- Note("Tile Mode is ON: Graphical tiles will be displayed.")
+--print("Tile Mode: ", tile_mode)
+SaveState()
+mapper.draw(current_room)
+   end
+if tile_mode == "1" then
+    Execute("mapper show tile off")
+    --  Note("Tile Mode is OFF: Graphical tiles will NOT be displayed.")
+--print("Tile Mode: ", tile_mode)
+SaveState()
+mapper.draw(current_room)
+   end
+end
+
+function tile_show(name, line, wildcards)
+   if (wildcards[2] ~= "") then
+      tile_mode = (wildcards[2] == "on")
+   end
+   if tile_mode then
+      Note("Tile Mode is ON: Graphical tiles will be displayed.")
+--print("Tile Mode: ", tile_mode)
+SaveState()
+mapper.draw(current_room)
+   else
+      Note("Tile Mode is OFF: Graphical tiles will NOT be displayed.")
+--print("Tile Mode: ", tile_mode)
+SaveState()
+mapper.draw(current_room)
+   end
+end
+
+function shownote_toggle(name, line, wildcards)
+   if (wildcards[2] ~= "") then
+      shownotes = (wildcards[2] == "on")
+   end
+   if shownotes then
+      Note("SHOWNOTES is ON: Notes added to rooms will display automatically upon entrance.")
+   else
+      Note("SHOWNOTES is OFF: Notes added to rooms will NOT display automatically.")
+   end
+end
+------------------------------------------------------------------------------------------------
+-- CUSTOM EXIT SHIT, HAVE FUN.. HEH.
+------------------------------------------------------------------------------------------------
+function map_cexits_delete (name, line, wildcards)
+   local query = string.format("delete from exits where fromuid=%s and dir not in ('n','s','e','w','d','u');", fix_sql(current_room))
+   run_sql(query)
+   for k,v in pairs(rooms[current_room].exits) do
+      if not directions[k] then
+         print("Found custom exit \""..k.."\" to room "..rooms[current_room].exits[k].." \""..rooms[rooms[current_room].exits[k]].name.."\"")
+         rooms[current_room].exits[k] = nil
+         --rooms[current_room].exit_locks[k] = nil
+      end
+   end
+   mapper.draw (current_room)
+   print("Removed custom exits from the current room.")
+end
+
+function map_cexits_purge (name, line, wildcards)
+   local query = "delete from exits where dir not in ('n','s','e','w','d','u');"
+   run_sql(query)
+   for k,v in pairs(rooms) do
+      for l,w in pairs(v.exits) do
+         if not directions[l] then
+            rooms[k].exits[l] = nil
+            --rooms[k].exit_locks[l] = nil
+         end
+      end
+   end
+   mapper.draw (current_room)
+   print("Purged all custom exits.")
+end
+
+BASE_CEXIT_DELAY = 2
+
+function custom_exit_list (name, line, wildcards)
+   local line = ""
+   local count = 0
+   local query
+   local display_limit = 30
+
+   area = Trim(wildcards [1] or "")
+   query = string.format("select uid, name, area, dir, touid from rooms inner join exits on rooms.uid = fromuid where lower(area) like %s and dir not in ('n','s','e','w','d','u') and fromuid not in ('*','**') order by area, uid", fix_sql("%" .. area .. "%"))
+
+   if area == "" then
+      intro = "The following rooms have custom exits:"
+   else
+      if area == "here" then
+
+         if current_room and current_area then
+            area = current_area
+         else
+            Note("CEXITS HERE ERROR: The mapper doesn't know where you are. Type 'LOOK' and try again.")
+            return
+         end
+
+         query = string.format("select uid, name, area, dir, touid from rooms inner join exits on rooms.uid = fromuid where lower(area) is %s and dir not in ('n','s','e','w','d','u','nw','ne','se','sw') and fromuid not in ('*','**') order by uid", fix_sql(area))
+         intro = "The following rooms in the current area have custom exits:"
+      elseif area == "thisroom" then
+         if not current_room then
+            Note("CEXITS THISROOM ERROR: The mapper doesn't know where you are. Type 'LOOK' and try again.")
+            return
+         end
+         query = string.format("select uid, name, area, dir, touid from rooms inner join exits on rooms.uid = fromuid where fromuid=%s and dir not in ('n','s','e','w','d','u','nw','ne','se','sw')", fix_sql(current_room))
+         intro = "The following custom exits are in this room:"
+      else
+         intro = string.format("The following rooms in areas partially matching '%s' have custom exits:",area)
+      end
+   end
+
+   hr = "| area       | room name            | rm uid  | dir            | to uid  |"
+   hl = "+------------+----------------------+---------+----------------+---------+"
+
+   -- area - room name - room uid - direction - destination uid
+   fmt = "| %10.10s | %-20.20s | %7.7s | %-14.14s | %7.7s |"
+   -- print ("Query: " .. query)
+   world.Note ("\n"..intro)
+   world.Note (hl)
+   world.Note (hr)
+   world.Note (hl)
+  -- for row in dbnrowsWRAPPER(query) do
+     for row in run_sql(query) do
+
+      line = string.format(fmt,row.area, row.name, row.uid, row.dir, row.touid)
+      Hyperlink(string.format("mapper goto %s",row.uid), line, string.format("%s",row.dir), "", "", false, NoUnderline_hyperlinks)
+      print("")
+      count = count + 1
+      CallPlugin("abc1a0944ae4af7586ce88dc", "BufferedRepaint")
+   end -- custom exits query
+   world.Note (hl)
+   line = string.format ("Found %s custom exits.", count)
+   print (line.."\n")
+end -- custom_exits_list
+
+function change_cexit_delay(name, line, wildcards)
+   temp_cexit_delay = tonumber(wildcards[1])
+   if not compact_mode then Note("") end
+   if temp_cexit_delay == nil or temp_cexit_delay < BASE_CEXIT_DELAY or temp_cexit_delay > 40 then
+      Note("CEXIT_DELAY FAILED: Invalid delay given ("..wildcards[1].."). Must be a number from 2 to 40.")
+      temp_cexit_delay = nil
+   end
+   Note("CEXIT_DELAY: The next mapper custom exit will have ".. (temp_cexit_delay or BASE_CEXIT_DELAY) .." seconds to complete.\n")
+end
+
+function ExecuteWithWaits(cexit_command)
+   wait.make (function()
+      --SendNoEcho("echo {begin running}")
+      local partial_cexit_command = cexit_command
+      local strbegin,strend = string.find(partial_cexit_command,";?wait%(%d*.?%d+%);?")
+      while strbegin do
+         strbegin,strend = string.find(partial_cexit_command,";?wait%(%d*.?%d+%);?")
+         if strbegin ~= nil and strbegin ~= 1 then
+            Execute(string.sub(partial_cexit_command,1,strbegin-1))
+         end
+         if strend then
+            local wait_time = tonumber(string.match(string.sub(partial_cexit_command,strbegin,strend),"wait%((%d*.?%d+)%)"))
+            --SendNoEcho("echo {mapper_wait}wait("..wait_time..")")
+            line, wildcards = wait.regexp("^\\{mapper_wait\\}wait\\(([0-9]*\\.?[0-9]+)\\)",nil,trigger_flag.OmitFromOutput)
+            Note("CEXIT WAIT: waiting for "..wait_time.." seconds before continuing.")
+            CallPlugin("abc1a0944ae4af7586ce88dc", "BufferedRepaint")
+            wait.time(wait_time)
+            partial_cexit_command = string.sub(partial_cexit_command, strend+1)
+         end
+      end
+      Execute(partial_cexit_command)
+      --SendNoEcho("echo {end running}")
+   end)
+end
+
+-- custom_exit function contributed by Spartacus
+
+function custom_exit (name, line, wildcards)
+
+   local remap = {
+      n = "north",
+      w = "west",
+      s = "south",
+      e = "east",
+      u = "up",
+      d = "down",
+      ne = "northeast",
+      nw = "northwest",
+      se = "southeast",
+      sw = "southwest"
+   }
+   local cexit_command = wildcards [1] or ""
+   local cexit_start
+
+   if cexit_command == "" then
+      world.Note("Nothing to do!")
+      return
+   end -- if cexit_command
+
+   -- Note: Since the addition of the ignore_exits_mismatch room flag, I think this is no longer true.
+   --       Getting rid of the remap allows one to draw custom exit linkages between nomap rooms.
+   ------------------------------------
+   -- the current system makes standard letter exit (n,e,s,w,d,u) cexits not usable, so remap them
+   -- to their long word forms
+   --if remap[cexit_command] then
+   --   cexit_command = remap[cexit_command]
+   --end
+   if current_room then
+      cexit_start = current_room
+   else
+      world.Note("CEXIT FAILED: No room received from the mud yet. Try using the 'LOOK' command first.")
+      return
+   end -- if current_room
+
+   if cexit_start == "-1" then
+      world.Note ("CEXIT FAILED: You cannot link custom exits from unmappable rooms.") -- This shouldn't be possible to happen, but just in case
+      return
+   end
+
+   wait.make (function()
+      local cexit_delay = temp_cexit_delay or BASE_CEXIT_DELAY
+      local added_waits = 0
+      for wait_secs in string.gmatch(cexit_command, "wait%((%d*.?%d+)%)") do
+         added_waits = added_waits + tonumber(wait_secs)
+      end
+      world.Note("CEXIT: WAIT FOR CONFIRMATION BEFORE MOVING.\nThis should take about "..cexit_delay+added_waits.." seconds"..(((added_waits ~= 0) and " (includes "..added_waits.." seconds in added waits)") or "")..".")
+      CallPlugin("abc1a0944ae4af7586ce88dc", "BufferedRepaint")
+      ExecuteWithWaits(cexit_command)
+
+      wait.time(cexit_delay+added_waits)
+      temp_cexit_delay = nil
+      cexit_dest = current_room
+      if cexit_dest then
+         if cexit_dest == "-1" then
+            world.Note ("CEXIT FAILED: You cannot link custom exits to unmappable rooms.")
+         elseif cexit_dest ~= cexit_start then
+            world.Note (string.format("Custom Exit CONFIRMED: %s (%s) -> %s", cexit_start, cexit_command, cexit_dest))
+--print("Cexit Start: ", cexit_start)
+--print("Cexit Command: ", cexit_command)
+--print("Cexit Dest: ", cexit_dest)
+            run_sql(string.format ("INSERT OR REPLACE INTO exits (dir, fromuid, touid) VALUES (%s, %s, %s);",
+               fix_sql  (cexit_command),  -- direction (eg. "n")
+               fix_sql  (cexit_start),  -- from current room
+               fix_sql  (cexit_dest) -- destination room
+            ))
+                 -- update in-memory table
+            rooms[cexit_start].exits[cexit_command] = cexit_dest
+            --rooms[cexit_start].exit_locks[cexit_command] = "0"
+           -- update in-memory table
+      --rooms[uid].exits[cexit_command] = cexit_dest
+  -- add_update_room(rooms[cexit_start].exits[cexit_command], rooms[uid])
+    add_update_room(from_room, rooms[from_room])
+            mapper.draw (current_room)
+--print("Cexit Start: ", cexit_start)
+--print("Cexit Command: ", cexit_command)
+--print("Cexit Dest: ", cexit_dest)
+          SaveState()
+         else
+            world.Note (string.format("CEXIT FAILED: Custom Exit %s leads back here!", cexit_command))
+         end
+      else
+         world.Note ("CEXIT FAILED: Need to know where we ended up.")
+      end
+   end)
+end -- custom_exit
+
+last_area_requested = ""
+
+
+-- -----------------------------------------------------------------
+-- Here on "Exits:" line ----- we have changed rooms
+-- -----------------------------------------------------------------
 
 -- -----------------------------------------------------------------
 -- Here on "Exits:" line ----- we have changed rooms
@@ -830,16 +1525,24 @@ return
 
 
   local handlers = {
-      { name = "Edit bookmark", func = room_edit_bookmark} ,
-      { name = "-", } ,
-      { name = "Add Exit",    func = room_add_exit} ,
+     -- { name = "(NOT-YET-IMPLEMENTED)Edit bookmark", func = room_edit_bookmark} ,
+    --  { name = "-", } ,
+    --  { name = "(NOT-YET-IMPLEMENTED)Add Exit",    func = room_add_exit} ,
       { name = "Change Exit", func = room_change_exit} ,
-      { name = "Delete Exit", func = room_delete_exit} ,
+      { name = "Delete Current Room", func = delete_room_click} ,
+	  { name = "Current Room Border Color", func = config_our_room_colour} ,
+	  { name = "Note Room Border Color", func = config_note_colour} ,
+      { name = "Toggle Graphical Tiles", func = tile_toggle} ,
       { name = "-", } ,
-      { name = checkmark ("shop")  .. "Shop",         func = room_toggle_shop } ,
-      { name = checkmark ("train") .. "Trainer",      func = room_toggle_train } ,
-      { name = checkmark ("inn")   .. "Inn",          func = room_toggle_inn } ,
-      { name = checkmark ("guild") .. "Guildmaster",  func = room_toggle_guild } ,
+      { name = checkmark ("shop")  .. "Mark as Waypoint",      func = room_toggle_waypoint } ,
+	  { name = checkmark ("shop")  .. "Mark as Mage Trainer",  func = room_toggle_weaponshop } ,
+      { name = checkmark ("shop")  .. "Mark as Armor Shop",    func = room_toggle_armorshop } ,
+      { name = checkmark ("shop")  .. "Mark as Food Shop",     func = room_toggle_foodshop } ,
+      { name = checkmark ("shop")  .. "Mark as Item Shop",     func = room_toggle_itemshop } ,
+      { name = checkmark ("shop")  .. "Mark as Pet Shop",      func = room_toggle_petshop } ,
+      { name = checkmark ("shop")  .. "Mark as Tavern",        func = room_toggle_tavern } ,
+	  { name = checkmark ("bank")  .. "Mark as Bank",          func = room_toggle_bank } ,
+      { name = checkmark ("shop")  .. "Mark as Inn",           func = room_toggle_inn } ,
      } -- handlers
 
   local t, tf = {}, {}
@@ -861,6 +1564,41 @@ return
 
 end -- room_click
 
+function room_toggle_waypoint()
+Execute ("mapper flag waypoint")
+end -- room_toggle_waypoint
+
+function room_toggle_magetrainer()
+Execute ("mapper flag magetrainer")
+end -- room_toggle_magetrainer
+
+function room_toggle_armorshop()
+Execute ("mapper flag armorshop")
+end -- room_toggle_armorshop
+
+function room_toggle_foodshop()
+Execute ("mapper flag foodshop")
+end -- room_toggle_foodshop
+
+function room_toggle_itemshop()
+Execute ("mapper flag itemshop")
+end -- room_toggle_itemshop
+
+function room_toggle_petshop()
+Execute ("mapper flag petshop")
+end  -- room_toggle_petshop
+
+function room_toggle_tavern()
+Execute ("mapper flag tavern")
+end -- room_toggle_tavern
+
+function room_toggle_bank()
+Execute ("mapper flag bank")
+end -- room_toggle_bank
+
+function room_toggle_inn()
+Execute ("mapper flag inn")
+end -- room_toggle_inn
 
 -- -----------------------------------------------------------------
 -- map_find: mapper find xxx
@@ -1275,144 +2013,134 @@ function OnPluginInstall ()
                 show_help = OnHelp,         -- to show help,
                 show_other_areas = show_other_areas,  -- want to see areas other than the current one?
 }
-  mapper.mapprint (string.format ("MUSHclient mapper installed, version %0.1f", mapper.VERSION))
-
+      util.print("{RD{re{Rm{ro{Rn{YM{yU{YS{yH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Mapper installed: {Gv" .. version)
 
 end -- OnPluginInstall
 
-function OnHelp (name, line, wildcards)
-   local help_header = "                              [Demon Mush Mapper Help]                              "
-
-   local help_index = [[
-                           Mapper Help Index
-=============================================================================
- mapper help               --> Show this list
------------------------------------------------------------------------------
- mapper help config        --> Commands for configuring the mapper
- mapper help moving        --> Commands for moving between rooms
- mapper help utils         --> Other utilitarian commands
- mapper help searching     --> Used for finding notes, shops, guildmasters, etc
-=============================================================================
-]]
-   local help_table = {
-   ['config'] = {
-['header'] = [[===== CONFIGURATION =============>]],
-[[mapper help                    --> This help
-                                 > (or click the "?" button on the top right)]],
-[[mapper zoom out                --> Zoom out]],
-[[mapper zoom in                 --> Zoom in]],
-[[mapper hide                    --> Hide map]],
-[[mapper show                    --> Show map]],
-[[mapper updown                  --> Toggle up/down exit drawing]],
-[[mapper underlines              --> Toggle underlining of clickable links]]
-},
-
-   ['utils'] = {
-['header'] = [[===== UTILITIES =================>]],
-[[mapper backup                  --> Creates a backup of the mapper database]],
-[[mapper addnote                 --> Add a new note to the current room]],
-[[mapper addnote <note>          --> Ditto, but skips the dialog]]
-},
-   ['searching'] = {
-['header'] = [[===== SEARCHING =================>]],
-[[mapper find <text>             --> Full-text search the whole database]],
-[[]],
-[[mapper notes                   --> Show nearby rooms that you marked with notes]],
-[[mapper notes <here/area>       --> Ditto]],
-[[mapper shops                   --> Show all shops/banks]],
-[[mapper shops <here/area>       --> Ditto]],
-[[mapper train                   --> Show all trainers]],
-[[mapper train <here/area>       --> Ditto]],
-[[mapper quest                   --> Show all quest-givers]],
-[[mapper quest <here/area>       --> Ditto]],
-[[]],
-[[mapper next                    --> Visit the next room in the most recent
-                                 > list of results.]],
-[[mapper next <index>            --> Ditto, but skip to the given result index.]],
-[[mapper where <room id>         --> Show directions to a room number]]
-},
-
-
-   ['moving'] = {
-['header'] = [[===== MOVING ====================>]],
-[[mapper goto <room id>          --> Run to a room by its room number]]
-}
-}
-
-   local function show_help(helps)
-      blackindigoPrint("")
-      blackindigoPrint(helps['header'])
-      blackindigoPrint("")
-      for i,v in ipairs(helps) do
-         blackindigoPrint(v)
-      end
-   end
-
-   blackindigoPrint("")
-   whiteindigoPrint(help_header)
-   blackindigoPrint("+---------------------------------------------------------------------------+")
-   badnews = true
-   if wildcards and wildcards[2] ~= "" then
-      badnews = false
-      if wildcards[2] == "all" then
-         show_help(help_table['config'])
-         show_help(help_table['exits'])
-         show_help(help_table['searching'])
-         show_help(help_table['moving'])
-         show_help(help_table['utils'])
-      elseif wildcards[2] == "config" then
-         show_help(help_table['config'])
-      elseif wildcards[2] == "searching" then
-         show_help(help_table['searching'])
-      elseif wildcards[2] == "moving" then
-         show_help(help_table['moving'])
-      elseif wildcards[2] == "utils" then
-         show_help(help_table['utils'])
-      elseif wildcards[2]:find("search ") == 1 then
-         local st, en = wildcards[2]:find("search ")
-         local pattern = Trim(wildcards[2]:sub(en+1))
-         ColourTell("cornflower","black","Searching help for: ")
-         ColourNote("red","black",pattern)
-         if pattern ~= "" then
-            for k,v in pairs(help_table) do
-               local done_header = false
-               for j,w in ipairs(v) do
-                  if (w ~= "") and (w:find("--------",nil,true) == nil) and (w:find(pattern) ~= nil) then
-                     if not done_header then
-                        blackindigoPrint("")
-                        blackindigoPrint(v['header'])
-                        done_header = true
-                     end
-                     blackindigoPrint("")
-                     local wtable = w:split(pattern)
-                     for i,v in ipairs(wtable) do
-                        ColourTell("cornflower","black",v)
-                        if (i < #wtable) then
-                           ColourTell("red", "black", pattern)
-                        end
-                     end
-                     Note("")
-                  end
-               end
-            end
-         else
-            badnews = true
-         end
-      else
-         badnews = true
-      end
-   end
-   if badnews then
-      blackindigoPrint("")
-      mapper.mapprint (world.GetPluginInfo (world.GetPluginID (), 3))
-      blackindigoPrint("")
-      blackindigoPrint(help_index)
-   end
-   blackindigoPrint("")
-   blackindigoPrint("+---------------------------------------------------------------------------+")
-   blackindigoPrint("")
+------------------------------------------------------------------------------------------------------------
+---------------------------------- SUPER MAPPER HELP PAGES HERE --------------------------------------------
+------------------------------------------------------------------------------------------------------------
+function mapperhelp()
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("{WPlugin Name  : {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Mapper")
+      util.print("{WAuthor       : {x238Asmodeus")
+      util.print("{WVersion      : {G" .. version)
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YIndex                            ")
+      util.print("{R================================================================================")
+      util.print("")
+      util.print("{W {x238Dimmed{W options are currently {x238unavailable")
+      util.print("")
+      util.print("{Y mapper help               {R-->{W Show this list")
+      util.print("{Y mapper help config        {R-->{W Commands for configuring the mapper")
+      util.print("{Y mapper help exits         {R-->{W Commands for setting custom exits")
+      util.print("{Y mapper help moving        {R-->{W Commands for moving between rooms")
+      util.print("{Y mapper help utils         {R-->{W Other utilitarian commands")
+      util.print("{Y mapper help flags         {R-->{W Commands to set flags on rooms")
+      util.print("{x238 mapper help searching     --> Used for finding notes, shops, banks, etc")
+      util.print("")
+      util.print("{R================================================================================")
+      util.print("")
 end
 
+function mapperhelpconfig()
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YConfiguration                            ")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+      util.print("{W Click the {Rasterisk{W or {Rquestion mark{W on the top left or right of the mapper")
+      util.print("")
+      util.print("{Y mapper zoom out           {R-->{W Zooms out your view of the map")
+      util.print("{Y mapper zoom in            {R-->{W Zooms in your view of the map")
+      util.print("{Y mapper hide               {R-->{W Hides the mapper window")
+      util.print("{Y mapper show               {R-->{W Unhides the mapper window")
+      util.print("{Y mapper config roomcolor   {R-->{W Changes the border color of our current room")
+      util.print("")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+end
+
+function mapperhelpexits()
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YExits                            ")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+      util.print("{W {x238Dimmed{W options are currently {x238unavailable")
+      util.print("")
+      util.print("{x238 mapper cexits             --> Lists known custom exits")
+      util.print("{x238 mapper cexits <here/area> --> List known custom exits here or in another area")
+      util.print("{Y mapper cexit <command>    {R-->{W Follow and link a custom exit")
+      util.print("{Y                              {W To insert a pause during execution of the cexit,")
+      util.print("{Y                              {W use wait(<seconds>) as one or more of the cexit moves")
+      util.print("{Y                              {W To stack commands, use {Y;;{W as separator to get around")
+      util.print("{Y                              {W the line break parser (ex: '{Ymapper cexit open south;;south{W')")
+      util.print("{Y mapper delete cexits      {R-->{W Remove the custom exits from this room")
+      util.print("{x238 mapper purge cexits       --> Remove ALL custom exits")
+      util.print("{Y mapper cexit_wait seconds {R-->{W Wait this number of seconds instead of the standard 2 ")
+      util.print("{Y                              {W when constructing the next cexit (between 2 and 30)")
+      util.print("")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+end
+
+function mapperhelpmoving()
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YMoving                            ")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+      util.print("{Y mapper goto <uid>         {R-->{W Walks to the specified UID. Use {Ymapper print uid")
+      util.print("{Y                              {W to get the UID of your current room, or click the")
+      util.print("{Y                              {W asterisk on the top left of the map and enable")
+      util.print("{Y                              {W the {YShow Room ID option")
+      util.print("{Y mapper find <keyword> {Wor  {R-->{W Finds all rooms with the given keywords within")
+      util.print("{Y find <keyword>               {W a 300 room radius. Click the desired link to")
+      util.print("{Y                              {W begin the walk towards your destination")
+      util.print("{Y mapper resume{W or {Ygo       {R-->{W Resumes any interrupted speedwalk")
+      util.print("{Y mapper stop{W or {Ystop       {R-->{W Immediately stops any active speedwalk")
+      util.print("")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+end
+
+function mapperhelputils()
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YUtils                            ")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+      util.print("{Y mapper print              {R-->{W Prints a list of the UID, name, terrain, exits,")
+      util.print("{Y                              {W area, and room flags from your current room")
+      util.print("{Y mapper show explored      {R-->{W Shows the amount of rooms explored in the game")
+      util.print("{Y mapper print uid          {R-->{W Prints the UID of the current room")
+      util.print("{Y mapper backup             {R-->{W Instantly creates a backup of the map database")
+      util.print("{Y mapper addnote            {R-->{W Adds a new note for the current room. Erase all")
+      util.print("{Y                              {W text to remove a note from a room")
+      util.print("{Y mapper addnote <note>     {R-->{W Adds a new note, but skips the entry box")
+      util.print("{Y mapper shownotes [on/off] {R-->{W Toggles display of notes upon entering a room")
+      util.print("{Y mapper show tile [on/off] {R-->{W Toggles display of graphical tiles")
+      util.print("{Y mapper delete room        {R-->{W Deletes the current room you're in")
+      util.print("{Y mapper delete room <uid>  {R-->{W Deletes the designated room")
+      util.print("{Y mapper where <uid>        {R-->{W Shows directions to the designated room")
+      util.print("")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+end
+
+function mapperhelpflags()
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YFlags            ")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+      util.print("{Y mapper flag [flag/clear]  {R-->{W Appends or clears a flag to the current room")
+      util.print("")
+      util.print("{Y Valid flags               {R-->{W waypoint, bank, alchemyguild, priest, forge")
+      util.print("{Y                              {W weaponshop, armorshop, petshop, itemshop")
+      util.print("{Y                              {W foodshop, tavern, morgue, quest, fountain, gato")
+      util.print("{Y                              {W moti, inn")
+      util.print("")
+      util.print("{W--------------------------------------------------------------------------------")
+      util.print("")
+end
 
 -- -----------------------------------------------------------------
 -- Plugin Save State
@@ -1422,6 +2150,10 @@ function OnPluginSaveState ()
   mapper.save_state ()
   SetVariable ("config", "config = " .. serialize.save_simple (config))
   SetVariable("last_backup", last_backup)
+  SetVariable("OUR_ROOM_COLOUR", OUR_ROOM_COLOUR) -- Color of Room Border
+  SetVariable("NOTE_ROOM_COLOUR", NOTE_ROOM_COLOUR) -- Color of Room Border
+  SetVariable("shownotes", shownotes and "1" or "0")
+  SetVariable("tile_mode", tile_mode and "1" or "0")
 end -- OnPluginSaveState
 
 ------------------------------------------
@@ -1433,6 +2165,14 @@ function delete_room_alias(name, line, wildcards)
 		delete_room(num)
 	end
 end
+
+function delete_room_click(name, line, wildcards)
+	local num = current_room
+	if num then
+		delete_room(num)
+	end
+end
+
 
 function delete_area_alias(name, line, wildcards)
 	local a = wildcards[1]
@@ -1510,6 +2250,7 @@ run_sql(sql)
 		}
 	end
 	Note("Loaded ", cnt, " rooms from database.")
+	    SetVariable("cnt", cnt)
 	db:close()
 
 	if tonumber(last_backup) == 0 then
