@@ -94,6 +94,8 @@ WindowShow (win, ShowWindow)
    sequence="100"
   >
   <send>max_exp = tostring("%1")
+    SetVariable("max_exp", max_exp)
+	WindowShow (win, ShowWindow)
   </send>
   </trigger>
 <trigger
@@ -104,6 +106,7 @@ WindowShow (win, ShowWindow)
    sequence="100"
   >
   <send>max_exp = tostring("%1")
+  SetVariable("max_exp", max_exp)
      WindowShow (win, ShowWindow)
   </send>
   </trigger>
@@ -238,7 +241,7 @@ local window_visible = true -- always start out with visible window
 TNL = "0"
 exp = "0"
 remorts = "0"
-max_exp = "10000000"
+max_exp = GetVariable("max_exp") or "10000000"
 no_enemy=0
 max_enemy=100
 enemy="0" or nil
@@ -789,6 +792,7 @@ function OnPluginSaveState ()
    SetVariable("thresh2percent", thresh2percent)
    SetVariable("thresh1color", thresh1color)
    SetVariable("thresh2color", thresh2color)
+   SetVariable("max_exp", max_exp)
 end -- OnPluginSaveState
 
 function OnPluginClose()
