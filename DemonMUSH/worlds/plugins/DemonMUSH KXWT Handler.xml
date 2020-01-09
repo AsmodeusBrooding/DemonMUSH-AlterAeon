@@ -734,7 +734,7 @@ Sound("volume=%2")
 volume = %2
 SetVariable("volume", volume)
 --print("Volume: ", volume)
-util.print("~Y~HVolume changed to ~R~H" .. (GetVariable("volume") or 100) .. "~Y~H percent.")
+util.print("{YVolume changed to {R" .. (GetVariable("volume") or 100) .. "{Y percent.")
    SaveState()
 </send>
 </alias> 
@@ -1066,7 +1066,7 @@ Send("ping")
 <script>
 <![CDATA[
 require "utility"
-dofile(GetPluginInfo(GetPluginID(), 20) .. "alter_colors.lua")
+dofile(GetPluginInfo(GetPluginID(), 20) .. "plugin_colors.lua")
 uid=""
 musicPlaying = false
 function OnPluginInstall()
