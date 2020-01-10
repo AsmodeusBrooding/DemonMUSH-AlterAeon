@@ -1534,15 +1534,22 @@ return
 	  { name = "Note Room Border Color", func = config_note_colour} ,
       { name = "Toggle Graphical Tiles", func = tile_toggle} ,
       { name = "-", } ,
-      { name = checkmark ("shop")  .. "Mark as Waypoint",      func = room_toggle_waypoint } ,
-	  { name = checkmark ("shop")  .. "Mark as Mage Trainer",  func = room_toggle_weaponshop } ,
-      { name = checkmark ("shop")  .. "Mark as Armor Shop",    func = room_toggle_armorshop } ,
-      { name = checkmark ("shop")  .. "Mark as Food Shop",     func = room_toggle_foodshop } ,
-      { name = checkmark ("shop")  .. "Mark as Item Shop",     func = room_toggle_itemshop } ,
-      { name = checkmark ("shop")  .. "Mark as Pet Shop",      func = room_toggle_petshop } ,
-      { name = checkmark ("shop")  .. "Mark as Tavern",        func = room_toggle_tavern } ,
-	  { name = checkmark ("bank")  .. "Mark as Bank",          func = room_toggle_bank } ,
-      { name = checkmark ("shop")  .. "Mark as Inn",           func = room_toggle_inn } ,
+      { name = checkmark ("shop")  .. "Mark as Waypoint",           func = room_toggle_waypoint } ,
+	  { name = checkmark ("shop")  .. "Mark as Mage Trainer",       func = room_toggle_magetrainer } ,
+      { name = checkmark ("shop")  .. "Mark as Cleric Trainer",     func = room_toggle_clerictrainer } ,
+      { name = checkmark ("shop")  .. "Mark as Thief Trainer",      func = room_toggle_thieftrainer } ,
+	  { name = checkmark ("shop")  .. "Mark as Warrior Trainer",    func = room_toggle_warriortrainer } ,
+	  { name = checkmark ("shop")  .. "Mark as Necromancer Trainer",func = room_toggle_necromancertrainer } ,
+	  { name = checkmark ("shop")  .. "Mark as Druid Trainer",      func = room_toggle_druidtrainer } ,
+	  { name = checkmark ("shop")  .. "Mark as Ranger Trainer",     func = room_toggle_rangertrainer } ,
+	  { name = checkmark ("shop")  .. "Mark as Alchemy Guild",      func = room_toggle_alchemyguild } ,
+	  { name = checkmark ("shop")  .. "Mark as Weapon Shop",        func = room_toggle_weaponshop } ,
+	  { name = checkmark ("shop")  .. "Mark as Armor Shop",         func = room_toggle_armorshop } ,
+      { name = checkmark ("shop")  .. "Mark as Item Shop",          func = room_toggle_itemshop } ,
+      { name = checkmark ("shop")  .. "Mark as Pet Shop",           func = room_toggle_petshop } ,
+      { name = checkmark ("shop")  .. "Mark as Tavern",             func = room_toggle_tavern } ,
+	  { name = checkmark ("bank")  .. "Mark as Bank",               func = room_toggle_bank } ,
+      { name = checkmark ("shop")  .. "Mark as Inn",                func = room_toggle_inn } ,
      } -- handlers
 
   local t, tf = {}, {}
@@ -1572,13 +1579,41 @@ function room_toggle_magetrainer()
 Execute ("mapper flag magetrainer")
 end -- room_toggle_magetrainer
 
+function room_toggle_clerictrainer()
+Execute ("mapper flag clerictrainer")
+end -- room_toggle_clerictrainer
+
+function room_toggle_thieftrainer()
+Execute ("mapper flag thieftrainer")
+end -- room_toggle_thieftrainer
+
+function room_toggle_warriortrainer()
+Execute ("mapper flag warriortrainer")
+end -- room_toggle_warriortrainer
+
+function room_toggle_necromancertrainer()
+Execute ("mapper flag necromancertrainer")
+end -- room_toggle_necromancertrainer
+
+function room_toggle_druidtrainer()
+Execute ("mapper flag druidtrainer")
+end -- room_toggle_druidtrainer
+
+function room_toggle_rangertrainer()
+Execute ("mapper flag rangertrainer")
+end -- room_toggle_rangertrainer
+
+function room_toggle_alchemyguild()
+Execute ("mapper flag alchemyguild")
+end -- room_toggle_alchemyguild
+
+function room_toggle_weaponshop()
+Execute ("mapper flag weaponshop")
+end -- room_toggle_weaponshop
+
 function room_toggle_armorshop()
 Execute ("mapper flag armorshop")
 end -- room_toggle_armorshop
-
-function room_toggle_foodshop()
-Execute ("mapper flag foodshop")
-end -- room_toggle_foodshop
 
 function room_toggle_itemshop()
 Execute ("mapper flag itemshop")
