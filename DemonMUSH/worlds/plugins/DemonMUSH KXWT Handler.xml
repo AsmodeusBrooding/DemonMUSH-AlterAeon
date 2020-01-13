@@ -419,7 +419,6 @@ nocastroom=true
    sequence="100"
   >
   <send>
-print ZAPPED
 </send>
   </trigger>
   <trigger
@@ -977,6 +976,14 @@ if musicPlaying == false then
 ------------------------------------------------------------------------------------
 
    <aliases>
+<alias
+   match="setup prompt"
+   enabled="y"
+   sequence="100"
+   send_to="14"
+   regexp="n"
+   ignore_case="y">
+<send>setup_prompt()</send></alias>
    <alias
    match="kxwt_area --printareanumber"
 	send_to="12"
@@ -1089,7 +1096,7 @@ version = "6.1"
 function setup_prompt()
 Execute("prompt fighting ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W{~WExp: ~G~H%xp~O~W} ~W~H%fi <%fc> (%fp) ~O~W{~W~H%pos~O~W}~O")
 Execute("prompt sleeping ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
-Execute("prompt default ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
+Execute("~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
 
 end -- function setup_prompt
 
@@ -1123,23 +1130,23 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 function demonhelp()
-      util.print("~R~H----------------------------------------------------------------------------------")
-      util.print("~W~HClient Name  : {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Client")
-      util.print("~W~HAuthors      : {DAsmodeus, Elisius")
-      util.print("~W~HVersion      : {G" .. version)
-      util.print("~R~H----------------------------------------------------------------------------------")
-      util.print("~O~W      Thank you for choosing {YC{yl{Ye{yf{Yt{RM{rU{RS{rH{w. The following guide will assist you ")
-      util.print("~O~W      with any needs you might have with the client. There are tons of cool ")
-      util.print("~O~W      features, so if you forget any of the commands, please refer to these")
-      util.print("~O~W      pages. Type one of the following options inside the brackets for help")
+      util.print("{R----------------------------------------------------------------------------------")
+      util.print("{WClient Name  : {RD{re{Rm{ro{Rn{YM{yU{YS{yH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Client")
+      util.print("{WAuthors      : {DAsmodeus, Elisius")
+      util.print("{WVersion      : {G" .. version)
+      util.print("{R----------------------------------------------------------------------------------")
+      util.print("{w      Thank you for choosing {RD{re{Rm{ro{Rn{YM{yU{YS{yH{w. The following guide will assist you ")
+      util.print("{w      with any needs you might have with the client. There are tons of cool ")
+      util.print("{w      features, so if you forget any of the commands, please refer to these")
+      util.print("{w      pages. Type one of the following options inside the brackets for help")
       util.print("")
       util.print("")
-	  util.print(" ~D[~x099Map Window{D: {Ymapper help{D] ~D[~x099Chat Window~D: ~Y~Hchat help~D] ~D[~x099Affects Window~D: ~Y~Haffect help~D] ")
+	  util.print(" {D[{x099Map Window{D: {Ymapper help{D] {D[{x099Chat Window{D: {Ychat help{D] {D[{x099Affects Window{D: {Yaffect help{D] ")
 	  util.print("")
-	  util.print(" ~D[~x099Action Bar~D: ~Y~Haction help~D] ~D[~x099Code Credit~D:   ~Y~Hcredits~D] ~D[~x099Main Output~D:    ~Y~Houtput help~D]")
+	  util.print(" {D[{x099Action Bar{D: {Yaction help{D] {D[{x099Code Credit{D:   {Ycredits{D] {D[{x099Main Output{D:    {Youtput help{D]")
 	  util.print("")
-	  util.print(" ~D[~x099MW Layout~D:  ~Y~Hwindow help~D] ~D[~x099Change Theme~D:  ~Y~Htheme change~D]")
-      util.print("~D----------------------------------------------------------------------------------")
+	  util.print(" {D[{x099MW Layout{D:  {Ywindow help{D] {D[{x099Change Theme{D:  {Ytheme change{D]")
+      util.print("{D----------------------------------------------------------------------------------")
       util.print("")
 end
 ]]>
