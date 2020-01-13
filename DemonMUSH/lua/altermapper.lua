@@ -1451,7 +1451,7 @@ function draw (uid)
    local end_time = utils.timer ()
 
    -- timing stuff
- --  if timing then
+   if timing then
       local count= 0
       for k in pairs (drawn) do
          count = count + 1
@@ -1465,16 +1465,16 @@ function draw (uid)
          total_times_drawn,
          total_time_taken / total_times_drawn))
 		         --    draw_next_batch_of_rooms()
-   --end -- if
+   end -- if
 
    -- let them move it around
    movewindow.add_drag_handler (win, 0, 0, 0, title_bottom)
 
-  -- end -- if
+-- end -- if
 
---   if show_timing then
+ if show_timing then
       print("Time elapsed drawing ", utils.timer()-outer_time)
---   end
+   end
 
    CallPlugin("abc1a0944ae4af7586ce88dc", "BufferedRepaint")
 end -- draw

@@ -4,7 +4,7 @@
 <!-- MuClient version 4.51 -->
 <!DOCTYPE muclient [
   <!ENTITY show_vnums "true" >
-  <!ENTITY show_timing "true" > 
+  <!ENTITY show_timing "false" > 
   <!ENTITY show_completed "false" >
   <!ENTITY show_database_mods "true" >
   <!ENTITY show_other_areas "true" >
@@ -799,6 +799,7 @@ require "copytable"
 require "wait"
 require "utility"
 require "tprint"
+dofile(GetPluginInfo(GetPluginID(), 20) .. "plugin_colors.lua")
 version = "6.05"
 uid = -999
 current_room=nil
@@ -2057,12 +2058,12 @@ end -- OnPluginInstall
 ------------------------------------------------------------------------------------------------------------
 function mapperhelp()
       util.print("{W--------------------------------------------------------------------------------")
-      util.print("{WPlugin Name  : {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Mapper")
+      util.print("{WPlugin Name  : {RD{re{Rm{ro{Rn{YM{yU{YS{yH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Mapper")
       util.print("{WAuthor       : {x238Asmodeus")
       util.print("{WVersion      : {G" .. version)
       util.print("{W--------------------------------------------------------------------------------")
       util.print("")
-      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YIndex                            ")
+      util.print("                 {RD{re{Rm{ro{Rn{YM{yU{YS{yH {x238Mapper Help: {YIndex                            ")
       util.print("{R================================================================================")
       util.print("")
       util.print("{W {x238Dimmed{W options are currently {x238unavailable")
@@ -2081,7 +2082,7 @@ end
 
 function mapperhelpconfig()
       util.print("{W--------------------------------------------------------------------------------")
-      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YConfiguration                            ")
+      util.print("                 {RD{re{Rm{ro{Rn{YM{yU{YS{yH {x238Mapper Help: {YConfiguration                            ")
       util.print("{W--------------------------------------------------------------------------------")
       util.print("")
       util.print("{W Click the {Rasterisk{W or {Rquestion mark{W on the top left or right of the mapper")
@@ -2098,7 +2099,7 @@ end
 
 function mapperhelpexits()
       util.print("{W--------------------------------------------------------------------------------")
-      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YExits                            ")
+      util.print("                 {RD{re{Rm{ro{Rn{YM{yU{YS{yH {x238Mapper Help: {YExits                            ")
       util.print("{W--------------------------------------------------------------------------------")
       util.print("")
       util.print("{W {x238Dimmed{W options are currently {x238unavailable")
@@ -2121,7 +2122,7 @@ end
 
 function mapperhelpmoving()
       util.print("{W--------------------------------------------------------------------------------")
-      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YMoving                            ")
+      util.print("                 {RD{re{Rm{ro{Rn{YM{yU{YS{yH {x238Mapper Help: {YMoving                            ")
       util.print("{W--------------------------------------------------------------------------------")
       util.print("")
       util.print("{Y mapper goto <uid>         {R-->{W Walks to the specified UID. Use {Ymapper print uid")
@@ -2140,7 +2141,7 @@ end
 
 function mapperhelputils()
       util.print("{W--------------------------------------------------------------------------------")
-      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YUtils                            ")
+      util.print("                 {RD{re{Rm{ro{Rn{YM{yU{YS{yH {x238Mapper Help: {YUtils                            ")
       util.print("{W--------------------------------------------------------------------------------")
       util.print("")
       util.print("{Y mapper print              {R-->{W Prints a list of the UID, name, terrain, exits,")
@@ -2163,7 +2164,7 @@ end
 
 function mapperhelpflags()
       util.print("{W--------------------------------------------------------------------------------")
-      util.print("                 {YC{yl{Ye{yf{Yt{RM{rU{RS{rH {x238Mapper Help: {YFlags            ")
+      util.print("                 {RD{re{Rm{ro{Rn{YM{yU{YS{yH {x238Mapper Help: {YFlags            ")
       util.print("{W--------------------------------------------------------------------------------")
       util.print("")
       util.print("{Y mapper flag [flag/clear]  {R-->{W Appends or clears a flag to the current room")
