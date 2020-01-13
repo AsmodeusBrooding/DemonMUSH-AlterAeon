@@ -9,14 +9,14 @@ local WHITE = 8
 
 
 local code_to_ansi_digit = {
-   ["~R"] = 31,
-   ["~G"] = 32,
-   ["~Y"] = 33,
-   ["~B"] = 34,
-   ["~P"] = 35,
-   ["~C"] = 36,
-   ["~W"] = 37,
-   ["~D"] = 30,
+   ["~O~R"] = 31,
+   ["~O~G"] = 32,
+   ["~O~Y"] = 33,
+   ["~O~B"] = 34,
+   ["~O~P"] = 35,
+   ["~O~C"] = 36,
+   ["~O~W"] = 37,
+   ["~F~W"] = 30,
    ["~R~H"] = 31,
    ["~G~H"] = 32,
    ["~Y~H"] = 33,
@@ -27,17 +27,17 @@ local code_to_ansi_digit = {
 }
 
 local ansi_digit_to_dim_code = {
-   [31] = "~R",
-   [32] = "~G",
-   [33] = "~Y",
-   [34] = "~B",
-   [35] = "~P",
-   [36] = "~C",
-   [37] = "~W"
+   [31] = "~O~R",
+   [32] = "~O~G",
+   [33] = "~O~Y",
+   [34] = "~O~B",
+   [35] = "~O~P",
+   [36] = "~O~C",
+   [37] = "~O~W"
 }
 
 local ansi_digit_to_bold_code = {
-   [30] = "~D~H",
+   [30] = "~F~W",
    [31] = "~R~H",
    [32] = "~G~H",
    [33] = "~Y~H",
@@ -56,17 +56,17 @@ for k,v in pairs(ansi_digit_to_bold_code) do
    first_15_to_code[k-22] = v  -- 8...15
 end
 for k,v in pairs(first_15_to_code) do
-   code_to_xterm[v] = string.format("~x%03d",k)
+   code_to_xterm[v] = string.format("~%03d",k)
 end
 
 local bold_codes = {
-   ["~D~H"]=true, ["~R~H"]=true, ["~G~H"]=true, ["~Y~H"]=true, ["~B~H"]=true,
+   ["~F~W"]=true, ["~R~H"]=true, ["~G~H"]=true, ["~Y~H"]=true, ["~B~H"]=true,
    ["~P~H"]=true, ["~C~H"]=true, ["~W~H"]=true
 }
 for i = 9,15 do
-   bold_codes[string.format("~x%03d",i)] = true
-   bold_codes[string.format("~x%02d",i)] = true
-   bold_codes[string.format("~x%d",i)] = true
+   bold_codes[string.format("~%03d",i)] = true
+   bold_codes[string.format("~%02d",i)] = true
+   bold_codes[string.format("~%d",i)] = true
 end
 
 
@@ -78,14 +78,14 @@ local function init_basic_to_color ()
    default_black = GetNormalColour(BLACK)
 
    code_to_client_color = {
-      ["~R"] = GetNormalColour(RED),
-      ["~G"] = GetNormalColour(GREEN),
-      ["~Y"] = GetNormalColour(YELLOW),
-      ["~B"] = GetNormalColour(BLUE),
-      ["~P"] = GetNormalColour(MAGENTA),
-      ["~C"] = GetNormalColour(CYAN),
-      ["~W"] = GetNormalColour(WHITE),
-      ["~D~H"] = GetBoldColour(BLACK),
+      ["~O~R"] = GetNormalColour(RED),
+      ["~O~G"] = GetNormalColour(GREEN),
+      ["~O~Y"] = GetNormalColour(YELLOW),
+      ["~O~B"] = GetNormalColour(BLUE),
+      ["~O~P"] = GetNormalColour(MAGENTA),
+      ["~O~C"] = GetNormalColour(CYAN),
+      ["~O~W"] = GetNormalColour(WHITE),
+      ["~F~W"] = GetBoldColour(BLACK),
       ["~R~H"] = GetBoldColour(RED),
       ["~G~H"] = GetBoldColour(GREEN),
       ["~Y~H"] = GetBoldColour(YELLOW),
@@ -98,17 +98,17 @@ end
 
 local function init_color_to_basic ()
    client_color_to_dim_code = {
-      [code_to_client_color["~R"]] = "~R",
-      [code_to_client_color["~G"]] = "~G",
-      [code_to_client_color["~Y"]] = "~Y",
-      [code_to_client_color["~B"]] = "~B",
-      [code_to_client_color["~P"]] = "~P",
-      [code_to_client_color["~C"]] = "~C",
-      [code_to_client_color["~W"]] = "~W"
+      [code_to_client_color["~O~R"]] = "~O~R",
+      [code_to_client_color["~O~G"]] = "~O~G",
+      [code_to_client_color["~O~Y"]] = "~O~Y",
+      [code_to_client_color["~O~B"]] = "~O~B",
+      [code_to_client_color["~O~P"]] = "~O~P",
+      [code_to_client_color["~O~C"]] = "~O~C",
+      [code_to_client_color["~O~W"]] = "~O~W"
    }
 
    client_color_to_bold_code = {
-      [code_to_client_color["~D~H"]] = "~D~H",
+      [code_to_client_color["~F~W"]] = "~F~W",
       [code_to_client_color["~R~H"]] = "~R~H",
       [code_to_client_color["~G~H"]] = "~G~H",
       [code_to_client_color["~Y~H"]] = "~Y~H",
@@ -133,26 +133,26 @@ local function init_xterm_colors ()
    for i = 0,255 do
       local color = xterm_number_to_client_color[i]
       x_not_too_dark[i] = i
-      x_to_client_color[string.format("~x%03d",i)] = color
-      x_to_client_color[string.format("~x%02d",i)] = color
-      x_to_client_color[string.format("~x%d",i)] = color
+      x_to_client_color[string.format("~%03d",i)] = color
+      x_to_client_color[string.format("~%02d",i)] = color
+      x_to_client_color[string.format("~%d",i)] = color
 
       client_color_to_xterm_number[color] = i
-      client_color_to_xterm_code[color] = string.format("~x%03d",i)
+      client_color_to_xterm_code[color] = string.format("~%03d",i)
    end
 
-   -- Aardwolf bumps a few very dark xterm colors to brighter values to improve
+   -- Cleft bumps a few very dark xterm colors to brighter values to improve
    -- visibility. This seems like a good idea.
    local color19 = xterm_number_to_client_color[19]
    local color238 = xterm_number_to_client_color[238]
    for i = 17,18 do
       x_not_too_dark[i] = 19
-      x_to_client_color[string.format("~x%03d",i)] = color19
-      x_to_client_color[string.format("~x%d",i)] = color19
+      x_to_client_color[string.format("~%03d",i)] = color19
+      x_to_client_color[string.format("~%d",i)] = color19
    end
    for i = 232,237 do
       x_not_too_dark[i] = 238
-      x_to_client_color[string.format("~x%d",i)] = color238
+      x_to_client_color[string.format("~%d",i)] = color238
    end
 end
 
@@ -252,8 +252,8 @@ function ColoursToStyles (input, default_foreground_code, default_background_cod
    local default_bold = false
    local default_foreground = code_to_client_color[default_foreground_code] or x_to_client_color[default_foreground_code]
    if not default_foreground then
-      default_foreground = code_to_client_color["~W"]
-      default_foreground_code = "~W"
+      default_foreground = code_to_client_color["~O~W"]
+      default_foreground_code = "~O~W"
    else
       default_bold = bold_codes[default_foreground_code] or false
       default_foreground_code = default_foreground_code
@@ -271,22 +271,22 @@ function ColoursToStyles (input, default_foreground_code, default_background_cod
          input = default_foreground_code .. input
       end -- if
 
-      input = input:gsub("~~", "\0") -- change ~~ to 0x00
+      input = input:gsub("~~", "\0") -- change {{ to 0x00
       input = input:gsub("~%-", "~") -- fix tildes (historical)
-      input = input:gsub("~x([^%d])","%1") -- strip invalid xterm codes (non-number)
-      input = input:gsub("~x[3-9]%d%d","") -- strip invalid xterm codes (300+)
-      input = input:gsub("~x2[6-9]%d","") -- strip invalid xterm codes (260+)
-      input = input:gsub("~x25[6-9]","") -- strip invalid xterm codes (256+)
+      input = input:gsub("~([^%d])","%1") -- strip invalid xterm codes (non-number)
+      input = input:gsub("~[3-9]%d%d","") -- strip invalid xterm codes (300+)
+      input = input:gsub("~2[6-9]%d","") -- strip invalid xterm codes (260+)
+      input = input:gsub("~25[6-9]","") -- strip invalid xterm codes (256+)
       input = input:gsub("~[^xrgybmcwDRGYBMCW]", "")  -- strip hidden garbage
 
-      for code, text in input:gmatch("(~%a)([^~]*)") do
+      for code, text in input:gmatch("(~%a)([^{]*)") do
          local from_x = nil
-         text = text:gsub("%z", "~") -- put any ~ characters back
+         text = text:gsub("%z", "~") -- put any { characters back
 
-         if code == "~x" then -- xterm 256 colors
+         if code == "~" then -- xterm 256 colors
             num,text = text:match("(%d%d?%d?)(.*)")
             code = code..num
-            -- Aardwolf treats x1...x15 as normal ANSI colors.
+            -- Cleft treats x1...x15 as normal ANSI colors.
             -- That behavior does not match MUSHclient's.
             num = tonumber(num)
             from_x = code
@@ -326,21 +326,21 @@ end  -- function ColoursToStyles
 
 -- Strip all color codes from a string
 function strip_colours (s)
-   s = s:gsub("~~", "\0")  -- change ~~ to 0x00
+   s = s:gsub("~~", "\0")  -- change {{ to 0x00
    s = s:gsub("~%-", "~")    -- fix tildes (historical)
-   s = s:gsub("~x%d?%d?%d?", "") -- strip valid and invalid xterm color codes
-   s = s:gsub("~.([^~]*)", "%1") -- strip normal color codes and hidden garbage
-   return (s:gsub("%z", "~")) -- put ~ back (has parentheses on purpose)
+   s = s:gsub("~%d?%d?%d?", "") -- strip valid and invalid xterm color codes
+   s = s:gsub("~.([^{@]*)", "%1") -- strip normal color codes and hidden garbage
+   return (s:gsub("%z", "~")) -- put { back (has parentheses on purpose)
 end -- strip_colours
 
 
--- Convert Aardwolf and short x codes to 3 digit x codes
+-- Convert Cleft and short x codes to 3 digit x codes
 function canonicalize_colours (s)
    if s:find("~", nil, true) then
-      s = s:gsub("~x(%d%d?%d?)", function(a)
+      s = s:gsub("~(%d%d?%d?)", function(a)
          local b = tonumber(a)
          if b and b <= 255 and b >= 0 then
-            return string.format("~x%03d", b)
+            return string.format("~%03d", b)
          else
             return ""
          end
@@ -398,10 +398,10 @@ function stylesToANSI (styles, dollarC_resets)
 end
 
 
--- Tries to convert ANSI sequences to Aardwolf color codes
+-- Tries to convert ANSI sequences to Cleft color codes
 function AnsiToColours (ansi, default_foreground_code)
    if not default_foreground_code then
-      default_foreground_code = "~W"
+      default_foreground_code = "~O~W"
    elseif default_foreground_code:sub(1,1) ~= "~" then
       default_foreground_code = "~"..default_foreground_code
    end
@@ -424,7 +424,7 @@ function AnsiToColours (ansi, default_foreground_code)
             if bold and ansi_digit_to_bold_code[nc+30] then
                color = ansi_digit_to_bold_code[nc+30]
             else
-               color = string.format("~x%03d", nc)
+               color = string.format("~%03d", nc)
             end
             xstage = 0
          elseif nc == 1 then
@@ -452,7 +452,7 @@ end
 function ColoursToANSI (text)
    -- return stylesToANSI(ColoursToStyles(text))
    if text:find("~", nil, true) then
-      text = text:gsub("~~", "\0") -- change ~~ to 0x00
+      text = text:gsub("~~", "\0") -- change @@ to 0x00
       text = text:gsub("~%-", "~") -- fix tildes (historical)
       text = text:gsub("~x([^%d])","%1") -- strip invalid xterm codes (non-number)
       text = text:gsub("~x[3-9]%d%d","") -- strip invalid xterm codes (300+)

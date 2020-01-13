@@ -446,7 +446,7 @@ keep_evaluating="y"
 -----------------------------------------------------------------------------------------------------
 
 
-dofile(GetPluginInfo(GetPluginID(), 20) .. "aardwolf_colors.lua")
+dofile(GetPluginInfo(GetPluginID(), 20) .. "plugin_colors.lua")
   
 function tells (name, line, wildcards, styles)
     -- print ("name = " .. name)
