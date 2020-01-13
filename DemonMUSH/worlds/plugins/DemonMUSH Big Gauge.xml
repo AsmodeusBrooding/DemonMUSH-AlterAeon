@@ -138,6 +138,32 @@ WindowShow (win, ShowWindow)
   </send>
   </trigger>
 <trigger
+   enabled="y"
+   keep_evaluating="y"
+   match="kxwt_event level * *"
+   regexp="n"
+   send_to="14"
+   omit_from_output="y"
+   sequence="100"
+  >
+  <send>
+Execute("show cost %2")
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   keep_evaluating="y"
+   match="kxwt_event microlevel * *"
+   regexp="n"
+   send_to="14"
+   omit_from_output="y"
+   sequence="100"
+  >
+  <send>
+Execute("show cost %2")
+  </send>
+  </trigger>
+<trigger
    enabled="n"
    match="<*hp *m *mv> ={Align: *}= {Gold: *} {Exp: *} {*}"
    regexp="n"
@@ -326,16 +352,6 @@ function validate_percent(input)
    return true
 end
 
---function fightgauge(name, line, wildcards)
---   if wildcards ~= nil then
---      enemy = wildcards [7]
---	  end
---fighting = true
---max_enemy=100
---gauge(win,showBar[bar][3],enemy,max_enemy,xpos+label_width,ypos,bar_width,line_height,showBar[bar][4],0x000000,bar_ticks,0xFFFFFF,showBar[bar][5],nil,flat_gauges==1)
---   CallPlugin("abc1a0944ae4af7586ce88dc", "BufferedRepaint")
---   end
-
 function DoNextSimpleBar(bar, current, max, flip, stacked_label, unstacked_label)
    txt = ""
    if (showBar[bar][2] == true) then
@@ -405,9 +421,9 @@ local hp, max_hp, mana, max_mana, move, max_move
 function DisplayStatsPage(name, line, wildcards)
    if wildcards ~= nil then
       page_built = true
-      hp = wildcards.hp
-	  mana = wildcards.mana
-	  move = wildcards.move
+      hp = wildcards.hp or 1
+	  mana = wildcards.mana or 1
+	  move = wildcards.move or 1
 	  max_hp = GetTriggerWildcard ("kxwt_prompt", "max_hp") or 0 -- get wildcard named enemy
       max_mana = GetTriggerWildcard ("kxwt_prompt", "max_mana") or 0 -- get wildcard named enemy
       max_move = GetTriggerWildcard ("kxwt_prompt", "max_move") or 0 -- get wildcard named enemy
