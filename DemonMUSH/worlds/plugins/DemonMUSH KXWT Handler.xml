@@ -1096,7 +1096,7 @@ version = "6.1"
 function setup_prompt()
 Execute("prompt fighting ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W{~WExp: ~G~H%xp~O~W} ~W~H%fi <%fc> (%fp) ~O~W{~W~H%pos~O~W}~O")
 Execute("prompt sleeping ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
-Execute("~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
+Execute("prompt default ~O~W<%chp%hp~O~Whp %cma%ma~O~Wm %mv~O~Wmv> ~O~W={Align: ~R~H%align~O~W}= {Gold: ~Y~H%gold~O~W} ~O~W{~WExp: ~G~H%xp~O~W} ~O~W{~W~H%pos~O~W}~O")
 
 end -- function setup_prompt
 
