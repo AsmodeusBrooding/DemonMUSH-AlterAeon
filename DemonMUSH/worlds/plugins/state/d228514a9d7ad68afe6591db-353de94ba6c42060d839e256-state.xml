@@ -17,7 +17,7 @@
   <variable name="bar_width">200</variable>
   <variable name="hp_color">#00ff00</variable>
   <variable name="mana_color">#3333ff</variable>
-  <variable name="moves_color">#ffff66</variable>
+  <variable name="moves_color">#ffd700</variable>
   <variable name="overlay_pct">1</variable>
   <variable name="pos_x">659</variable>
   <variable name="pos_y">0</variable>

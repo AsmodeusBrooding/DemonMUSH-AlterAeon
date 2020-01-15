@@ -436,7 +436,6 @@
 <include name="LuaAudio.xml" plugin="y" />
 <include name="DemonMUSH Utility Window.xml" plugin="y" />
 <include name="DemonMUSH Big Gauge.xml" plugin="y" />
-<include name="DemonMUSH_Waypoints.xml" plugin="y" />
 <include name="DemonMUSH Main Layout.xml" plugin="y" />
 <include name="Fighting_Sounds.xml" plugin="y" />
 <include name="Play_Random_Sound.xml" plugin="y" />
