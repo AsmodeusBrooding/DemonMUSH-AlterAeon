@@ -488,7 +488,7 @@ function DisplayStatsPage(name, line, wildcards)
       if (showBar[bar][2] == true) then
            if fighting == true then
             if enemy ~= nil then
-	  enemy = wildcards.enemy or enemy
+	  enemy = tonumber(wildcards.enemy) or enemy
                if showLabels == 1 then
                   if stacked == 1 then
                      WindowText(win, font_id, showBar[bar][1], xpos,  ypos, 0, 0, showBar[bar][4], false)

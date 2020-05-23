@@ -108,6 +108,7 @@
    muclient_version="5.06-pre"
    world_file_version="15"
   >
+
 </triggers>
 
 <!-- aliases -->
@@ -431,18 +432,17 @@
 <include name="aard_miniwindow_z_order_monitor.xml" plugin="y" />
 <include name="aard_GMCP_handler.xml" plugin="y" />
 <include name="DemonMUSH_Theme_Controller.xml" plugin="y" />
-<include name="DemonMUSH KXWT Handler.xml" plugin="y" />
-<include name="DemonMUSH Group Monitor.xml" plugin="y" />
 <include name="LuaAudio.xml" plugin="y" />
-<include name="DemonMUSH Utility Window.xml" plugin="y" />
-<include name="DemonMUSH Big Gauge.xml" plugin="y" />
-<include name="DemonMUSH Main Layout.xml" plugin="y" />
 <include name="Fighting_Sounds.xml" plugin="y" />
 <include name="Play_Random_Sound.xml" plugin="y" />
 <include name="DemonMUSH Communication Catcher.xml" plugin="y" />
 <include name="DemonMUSH Exp Tracker.xml" plugin="y" />
 <include name="DemonMUSH Mobkill Counter.xml" plugin="y" />
 <include name="DemonMUSH Copy Color.xml" plugin="y" />
+<include name="DemonMUSH Group Monitor.xml" plugin="y" />
+<include name="DemonMUSH Main Layout.xml" plugin="y" />
+<include name="DemonMUSH Big Gauge.xml" plugin="y" />
+<include name="DemonMUSH KXWT Handler.xml" plugin="y" />
 <include name="DemonMUSH Mapper.xml" plugin="y" />
 <include name="Hyperlink_URL2.xml" plugin="y" />
 </muclient>

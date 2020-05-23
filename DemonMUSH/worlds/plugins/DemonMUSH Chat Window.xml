@@ -129,10 +129,11 @@ USAGE:
 
 require "mw_theme_base"
 require "movewindow"
+require "gmcphelper"
 require "text_rect"
 require "scrollbar"
 
-dofile(GetPluginInfo(GetPluginID(), 20) .. "plugin_colors.lua")
+dofile(GetPluginInfo(GetPluginID(), 20) .. "aardwolf_colors.lua")
 
 local gap = 1
 MAX_LINES = 10000 -- how many lines to store in scrollback
@@ -156,9 +157,9 @@ log_to_file = tonumber(GetVariable("log_to_file")) or 0
 log_colour_codes = tonumber(GetVariable("log_colour_codes")) or 1
 log_timestamps = tonumber(GetVariable("log_timestamps")) or 1
 
---local init_nonchannel_keys = {"info"}
---local init_nonchannel_pairs = {["info"]="INFO:"}
-local init_channel_keys = {"grouptell", "discord", "grats", "music", "quote", "shout", "tells", "info", "says", "yell", "ooc"}
+local init_nonchannel_keys = {"info", "raidinfo", "claninfo", "clan_donations", "global_quest", "warfare", "remort_auction", "remote_socials"}
+local init_nonchannel_pairs = {["warfare"]="WARFARE:", ["info"]="INFO:", ["raidinfo"]="RAIDINFO:", ["claninfo"]="CLANINFO:", ["global_quest"]="Global Quest:", ["remort_auction"]="Remort Auction:", ["clan_donations"]="Clan Donations", ["remote_socials"]="Remote Socials"}
+local init_channel_keys = {"answer","auction","barter","cant","chant","claninfo","clantalk","commune","curse","dtell","ftalk","gametalk","gclan","gossip","grapevine","gratz","gtell","helper","immtalk","inform","lasertag","ltalk","mafiainfo","market","mchat","mobsay","music","newbie","pchat","pokerinfo","ptell","question","racetalk","rauction","restores","rp","say","snewbie","spouse","tech","telepathy","tell","tiertalk","trivia","wangrp","wardrums","yell"}
 channels_table = {}
 loadstring(GetVariable("channels_table") or "")()
 
@@ -204,16 +205,22 @@ function check_nonchannel_trigger(key)
    return on
 end
 
---function addDefaultNonChannels()
---   for tab,channels in ipairs(tabs_channel_captures) do
---      tabs_nonchannel_captures[tab] = tabs_nonchannel_captures[tab] or {}
---      for i,v in ipairs(init_nonchannel_keys) do
---         tabs_nonchannel_captures[tab][v] = tabs_nonchannel_captures[tab][v] or {["capture"]=true}
---      end
---   end
---enable non channel triggers
---  EnableTrigger("info", check_nonchannel_trigger("info"))
---end
+function addDefaultNonChannels()
+   for tab,channels in ipairs(tabs_channel_captures) do
+      tabs_nonchannel_captures[tab] = tabs_nonchannel_captures[tab] or {}
+      for i,v in ipairs(init_nonchannel_keys) do
+         tabs_nonchannel_captures[tab][v] = tabs_nonchannel_captures[tab][v] or {["capture"]=true}
+      end
+   end
+
+   EnableTrigger("remote_socials", check_nonchannel_trigger("remote_socials"))
+   EnableTrigger("warfare", check_nonchannel_trigger("warfare"))
+   EnableTrigger("info", check_nonchannel_trigger("info"))
+   EnableTrigger("raidinfo", check_nonchannel_trigger("raidinfo"))
+   EnableTrigger("claninfo", check_nonchannel_trigger("claninfo"))
+   EnableTrigger("global_quest", check_nonchannel_trigger("global_quest"))
+   EnableTrigger("remort_auction", check_nonchannel_trigger("remort_auction"))
+end
 
 function addNewChannel(chan)
    for tab,channels in ipairs(tabs_channel_captures) do
@@ -224,14 +231,14 @@ function addNewChannel(chan)
    end
 end
 
---function addDefaultChannels()
---   for i,v in ipairs(init_channel_keys) do
---      addNewChannel(v)
---   end
---   addDefaultNonChannels()
---end
---addDefaultChannels()
---reduce_diverse_channels()
+function addDefaultChannels()
+   for i,v in ipairs(init_channel_keys) do
+      addNewChannel(v)
+   end
+   addDefaultNonChannels()
+end
+addDefaultChannels()
+reduce_diverse_channels()
 
 function makeRect(i)
    tabs_rects[i] = TextRect.new(win, "tr"..tostring(i), tr_left, tr_top, tr_right, tr_bottom, 1000, true, Theme.PRIMARY_BODY, 3, "Fixedsys", 10)
@@ -381,6 +388,7 @@ function reset_aard()
 end
 
 function OnPluginListChanged ()
+   dofile "lua/aard_requirements.lua"
    CallPlugin ("55616ea13339bc68e963e1f8", "enable_hiding", true, GetPluginID())
 end
 
@@ -638,6 +646,9 @@ function OnPluginSaveState()
    SetVariable("WINDOW_WIDTH", width)
    SetVariable("WINDOW_HEIGHT", height)
    SetVariable("info_on", info_on)
+   SetVariable("global_quest_on", global_quest_on)
+   SetVariable("remort_auction_on", remort_auction_on)
+   SetVariable("warfare_on", warfare_on)
    SetVariable("log_to_file", log_to_file)
    SetVariable("log_colour_codes", log_colour_codes)
    SetVariable("log_timestamps", log_timestamps)
@@ -667,13 +678,12 @@ function stampAndLog(styles)
    end
 
    timestamp = os.date(date_format)
-   
 
    if (log_to_file == 1) then
       text = StylesToColours(styles)
 
       if (log_timestamps == 1) then
-         log_text = "{W"..timestamp..text
+         log_text = "~W"..timestamp..text
       else
          log_text = text
       end
@@ -870,19 +880,15 @@ function extend_rightclick_menu_result(sender, hotspot_id, result)
       ColourNote ("yellow", "", "Timestamps in communication window DISABLED.")
    elseif result == 3 then
       date_format = "[%d %b %H:%M:%S] "
-      SetVariable("date_format", date_format)
       ColourNote ("yellow", "", "Timestamps in communication window ENABLED using format like '30 Aug 13:29:49'.")
    elseif result == 4 then
-      date_format = "[%b %d %I:%M:%S%p] "
-      SetVariable("date_format", date_format)
-      ColourNote ("yellow", "", "Timestamps in communication window ENABLED using format like 'Aug 30 01:20:12PM'.")
+      date_format = "[%d %b %I:%M:%S%p] "
+      ColourNote ("yellow", "", "Timestamps in communication window ENABLED using format like '30 Aug 01:20:12PM'.")
    elseif result == 5 then
       date_format = "[%H:%M:%S] "
-      SetVariable("date_format", date_format)
       ColourNote ("yellow", "", "Timestamps in communication window ENABLED using format like '13:29:08'.")
    elseif result == 6 then
       date_format = "[%I:%M:%S%p] "
-      SetVariable("date_format", date_format)
       ColourNote ("yellow", "", "Timestamps in communication window ENABLED using format like '1:22:06 PM'.")
    elseif result == 7 then
       log_to_file = (((0 == log_to_file) and 1) or 0)
@@ -914,65 +920,65 @@ function extend_rightclick_menu_result(sender, hotspot_id, result)
    if (IsPluginInstalled("55616ea13339bc68e963e1f8")) then
       echo_skip = 4
       if result == 10 then
-         CallPlugin("84164fd114202591729cb51b", "unmute")
+         CallPlugin("55616ea13339bc68e963e1f8", "chat_echo", "on")
       elseif result == 11 then
-         CallPlugin("84164fd114202591729cb51b", "mute")
- --     elseif result == 12 then
- --       CallPlugin("55616ea13339bc68e963e1f8", "chat_echo", "channels")
- --     elseif result == 13 then
- --        CallPlugin("55616ea13339bc68e963e1f8", "chat_echo", "nonchannels")
+         CallPlugin("55616ea13339bc68e963e1f8", "chat_echo", "off")
+      elseif result == 12 then
+         CallPlugin("55616ea13339bc68e963e1f8", "chat_echo", "channels")
+      elseif result == 13 then
+         CallPlugin("55616ea13339bc68e963e1f8", "chat_echo", "nonchannels")
       end
    end
 
    noremove = (num_tabs < 2) and 1 or 0
 
- --  if result == 12+echo_skip then
-    if result == 12 then
+   if result == 10+echo_skip then
       setTab(addTab())
-   --elseif result == 13+echo_skip-noremove then
-   elseif result == 13 then
+   elseif result == 11+echo_skip-noremove then
       removeTab()
-  -- elseif result == 14+echo_skip-noremove then
-  elseif result == 14 then
+   elseif result == 12+echo_skip-noremove then
       local name = utils.inputbox("Choose a (preferably short) name for this channel capture tab", "Name Channel Tab", tostring(tabs_names[current_tab] or current_tab))
       nameTab(current_tab, name)
-  --  elseif result == 13+echo_skip-noremove then
-  --    local defaults = {}
-  --    local tbl = {}
-  --    for k,v in pairs(tabs_channel_captures[current_tab]) do
-  --        tbl[k] = k
-  --       defaults[k] = v["capture"]
-  --    end
+   elseif result == 13+echo_skip-noremove then
+      local defaults = {}
+      local tbl = {}
+      for k,v in pairs(tabs_channel_captures[current_tab]) do
+         tbl[k] = k
+         defaults[k] = v["capture"]
+      end
 
-  --    local capture_result = utils.multilistbox ("Choose which channels to capture to this communication log tab.", "Communication Log Channel Selection", tbl, defaults)
-  --   if capture_result then
-  --      for k,v in pairs(tabs_channel_captures[current_tab]) do
-  --         v["capture"] = capture_result[k]
-  --       end
-  --    end
-  --     reduce_diverse_channels()
-  -- elseif result == 14+echo_skip-noremove then
-  --    local defaults = {}
-  --    for k,v in pairs(tabs_nonchannel_captures[current_tab]) do
-  --       defaults[k] = v["capture"]
-  --    end
-  --
-  --    local capture_result = utils.multilistbox ("Choose which non-channel messages to capture to this communication log tab.", "Communication Log Channel Selection", init_nonchannel_pairs, defaults)
-  --    if capture_result then
-  --       for k,v in pairs(tabs_nonchannel_captures[current_tab]) do
-  --          v["capture"] = capture_result[k]
-  --       end
-  --    end
-  --     EnableTrigger("info", check_nonchannel_trigger("info"))
-  --    EnableTrigger("remote_socials", check_nonchannel_trigger("remote_socials"))
-   elseif result == 15 then
+      local capture_result = utils.multilistbox ("Choose which channels to capture to this communication log tab.", "Communication Log Channel Selection", tbl, defaults)
+      if capture_result then
+         for k,v in pairs(tabs_channel_captures[current_tab]) do
+            v["capture"] = capture_result[k]
+         end
+      end
+      reduce_diverse_channels()
+   elseif result == 14+echo_skip-noremove then
+      local defaults = {}
+      for k,v in pairs(tabs_nonchannel_captures[current_tab]) do
+         defaults[k] = v["capture"]
+      end
+
+      local capture_result = utils.multilistbox ("Choose which non-channel messages to capture to this communication log tab.", "Communication Log Channel Selection", init_nonchannel_pairs, defaults)
+      if capture_result then
+         for k,v in pairs(tabs_nonchannel_captures[current_tab]) do
+            v["capture"] = capture_result[k]
+         end
+      end
+      EnableTrigger("info", check_nonchannel_trigger("info"))
+      EnableTrigger("raidinfo", check_nonchannel_trigger("raidinfo"))
+      EnableTrigger("claninfo", check_nonchannel_trigger("claninfo"))
+      EnableTrigger("global_quest", check_nonchannel_trigger("global_quest"))
+      EnableTrigger("remort_auction", check_nonchannel_trigger("remort_auction"))
+      EnableTrigger("warfare", check_nonchannel_trigger("warfare"))
+      EnableTrigger("remote_socials", check_nonchannel_trigger("remote_socials"))
+   elseif result == 15+echo_skip-noremove then
       tabs_rects[current_tab]:clear()
-   elseif result == 16  then
+   elseif result == 16+echo_skip-noremove then
       CallPlugin("462b665ecb569efbf261422f","boostMe", win)
-   elseif result == 17 then
+   elseif result == 17+echo_skip-noremove then
       CallPlugin("462b665ecb569efbf261422f","dropMe", win)
-   elseif result == 18 then
-  Execute("commcheck")
    end
    SaveState()
 end
@@ -991,7 +997,7 @@ function extend_rightclick_menu_string(tr)
       ">Timestamp",
       "No Timestamps",
       "30 Aug 13:29:49",
-      "Aug 30 01:20:12PM",
+      "30 Aug 01:20:12PM",
       "13:29:08",
       "1:22:06 PM",
       "<",
@@ -1005,22 +1011,20 @@ function extend_rightclick_menu_string(tr)
       "Remove This Tab",
       "-",
       "Name This Tab",
-     -- ">Tab Capture Settings",
-     -- "Edit Channel Captures",
-     -- "Edit Non-channel Captures",
-     -- "<",
+      ">Tab Capture Settings",
+      "Edit Channel Captures",
+      "Edit Non-channel Captures",
+      "<",
       "Clear Tab",
       "-",
       "Bring to Front",
-      "Send to Back",
-      "-",
-      "Check Tab Settings"
+      "Send to Back"
    }
    local ms = menu_strings
 
    if date_format == "" then check(ms, 3) end
    if date_format == "[%d %b %H:%M:%S] " then check(ms, 4) end
-   if date_format == "[%b %d %I:%M:%S%p] " then check(ms, 5) end
+   if date_format == "[%d %b %I:%M:%S%p] " then check(ms, 5) end
    if date_format == "[%H:%M:%S] " then check(ms, 6) end
    if date_format == "[%I:%M:%S%p] " then check(ms, 7) end
 
@@ -1032,11 +1036,11 @@ function extend_rightclick_menu_string(tr)
    if (IsPluginInstalled("55616ea13339bc68e963e1f8")) then
       local echo_menu_strings = {
          ">Echo In Main Window Settings",
-         "Display all channel sends in main output",
-         "Hide all channel sends from main output",
-        -- "-",
-        -- "Edit Channel Echoes",
-        -- "Edit Non-channel Echoes",
+         "Echo All",
+         "Echo None",
+         "-",
+         "Edit Channel Echoes",
+         "Edit Non-channel Echoes",
          "<"
       }
       local ems = echo_menu_strings
