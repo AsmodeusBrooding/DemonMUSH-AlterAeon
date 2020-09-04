@@ -69,6 +69,8 @@ require "gauge"
 require "pairsbykeys"
 require "mw"
 
+dofile(GetPluginInfo(GetPluginID(), 20) .. "plugin_colors.lua")
+
 local FONT_ID     = "fn"  -- internal font identifier
 local FONT_ID_UL  = "fnu" -- internal font identifier - underlined
 local CONFIG_FONT_ID = "cfn"
@@ -532,11 +534,11 @@ local function draw_configuration ()
       "Click to toggle display of area exits",
       miniwin.cursor_hand, 0)  -- hand cursor
    y = y + font_height
-   
+
             -- show door exits
    WindowText(config_win, CONFIG_FONT_ID, "Show Door Exits", x, y, 0, 0, 0x000000)
    WindowText(config_win, CONFIG_FONT_ID_UL, ((config.SHOW_DOOR_EXITS and "On") or "Off"), width + rh_size / 2 + box_size - WindowTextWidth(config_win, CONFIG_FONT_ID_UL, ((config.SHOW_DOOR_EXITS and "On") or "Off"))/2, y, 0, 0, 0x808080)
-   
+
      -- show door exits hotspot
    WindowAddHotspot(config_win,
       "$<door_exits>",
@@ -787,19 +789,19 @@ local function draw_room (uid, path, x, y)
 
      local special_room = false
    -- DRAW MAP IMAGES
-   tile_mode = GetPluginVariable("dd07d6dbe73fe0bd02ddb63d", "tile_mode") or "1" 
+     tile_mode = GetPluginVariable("dd07d6dbe73fe0bd02ddb63d", "tile_mode") or "1"
 
-                             if room.fillcolour and room.fillcolour ~= "" and tile_mode == "1" then
+     if room.fillcolour and room.fillcolour ~= "" and tile_mode == "1" then
 
-   	                         if string.match (room.fillcolour, "9109504") then
-          WindowDrawImage (win, "ocean", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-	                         elseif string.match (room.fillcolour, "9465920") then
+   	                 if string.match (room.fillcolour, "9109504") then
+        WindowDrawImage (win, "ocean", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+	                   elseif string.match (room.fillcolour, "9465920") then
 	      WindowDrawImage (win, "town", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-		  	                 elseif string.match (room.fillcolour, "61680") then
+		  	             elseif string.match (room.fillcolour, "61680") then
 	      WindowDrawImage (win, "stream", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-		  	                 elseif string.match (room.fillcolour, "8411682") then
+		  	             elseif string.match (room.fillcolour, "8411682") then
 	      WindowDrawImage (win, "city", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-		  		  	         elseif string.match (room.fillcolour, "14745599") then
+		  		  	       elseif string.match (room.fillcolour, "14745599") then
 	      WindowDrawImage (win, "beach", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 		  		  		  	 elseif string.match (room.fillcolour, "16711680") then
 	      WindowDrawImage (win, "water", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
@@ -813,20 +815,20 @@ local function draw_room (uid, path, x, y)
 	      WindowDrawImage (win, "field", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 		  		  		  	 elseif string.match (room.fillcolour, "6316128") then
 	      WindowDrawImage (win, "building", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-		  	                 elseif string.match (room.fillcolour, "65535") then
-          WindowDrawImage (win, "desert", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-	 		  	             elseif string.match (room.fillcolour, "8894686") then
-          WindowDrawImage (win, "desert", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+		  	             elseif string.match (room.fillcolour, "65535") then
+        WindowDrawImage (win, "desert", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+	 		  	           elseif string.match (room.fillcolour, "8894686") then
+        WindowDrawImage (win, "desert", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 		  	 		  	     elseif string.match (room.fillcolour, "8409216") then
-          WindowDrawImage (win, "tundra", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-		  		  	 		 elseif string.match (room.fillcolour, "24576") then
-          WindowDrawImage (win, "taiga", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-		  		  	 		 elseif string.match (room.fillcolour, "8583398") then
-          WindowDrawImage (win, "ice", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-	 		  	             elseif string.match (room.fillcolour, "9234160") then
-          WindowDrawImage (win, "sandy", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+        WindowDrawImage (win, "tundra", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+		  		  	 		   elseif string.match (room.fillcolour, "24576") then
+        WindowDrawImage (win, "taiga", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+		  		  	 		   elseif string.match (room.fillcolour, "8583398") then
+        WindowDrawImage (win, "ice", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+	 		  	           elseif string.match (room.fillcolour, "9234160") then
+        WindowDrawImage (win, "sandy", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 		  	 		  	     elseif string.match (room.fillcolour, "32768") then
-          WindowDrawImage (win, "thickforest", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+        WindowDrawImage (win, "thickforest", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 		  		  		  	 elseif string.match (room.fillcolour, "4210752") then
 	      WindowDrawImage (win, "cave", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 		  		  		  	 elseif string.match (room.fillcolour, "4219008") then
@@ -835,7 +837,7 @@ local function draw_room (uid, path, x, y)
 	      WindowDrawImage (win, "hill", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 		  		  		  	 elseif string.match (room.fillcolour, "15790240") then
 	      WindowDrawImage (win, "wasteland", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-		  		  		  		  	 elseif string.match (room.fillcolour, "12632256") then
+		  		  		  	 elseif string.match (room.fillcolour, "12632256") then
 	      WindowDrawImage (win, "mountain", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
 
 	 end -- if
@@ -845,20 +847,20 @@ local function draw_room (uid, path, x, y)
                       if string.match (room.info, "waypoint") then
                                       special_room = true
                                 WindowDrawImage (win, "waypoint", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,WAYPOINT_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
                       elseif string.match (room.info, "bank") then
                                       special_room = true
                                 WindowDrawImage (win, "bank", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,BANK_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
                                       room.fillbrush = 8  -- medium pattern
                       elseif string.match (room.info, "alchemyguild") then
                                       special_room = true
                                 WindowDrawImage (win, "alchemyguild", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,ALCHEMY_GUILD_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
                                       room.fillbrush = 0 -- solid
@@ -881,64 +883,65 @@ local function draw_room (uid, path, x, y)
                                       special_room = true
                                       room.fillcolour = mapper.FORGE_FILL_COLOUR.colour
                                       room.fillbrush = 0  -- solid
-                  elseif string.match (room.info, "warriortrainer") then
+                      elseif string.match (room.info, "warriortrainer") then
                                       special_room = true
                                 WindowDrawImage (win, "warriortrainer", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,WARRIOR_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
-              elseif string.match (room.info, "thieftrainer") then
+                      elseif string.match (room.info, "thieftrainer") then
                                       special_room = true
                                 WindowDrawImage (win, "thieftrainer", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
                                 WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,THIEF_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
-              elseif string.match (room.info, "druidtrainer") then
+                      elseif string.match (room.info, "druidtrainer") then
                                       special_room = true
                                 WindowDrawImage (win, "druidtrainer", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,DRUID_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
-                  elseif string.match (room.info, "clerictrainer") then
+                      elseif string.match (room.info, "clerictrainer") then
                                       special_room = true
                                 WindowDrawImage (win, "clerictrainer", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,CLERIC_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
-              elseif string.match (room.info, "magetrainer") then
+                      elseif string.match (room.info, "magetrainer") then
                                       special_room = true
                                 WindowDrawImage (win, "magetrainer", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,MAGE_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
-              elseif string.match (room.info, "necromancertrainer") then
+                      elseif string.match (room.info, "necromancertrainer") then
                                       special_room = true
                                 WindowDrawImage (win, "necromancertrainer", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,NECRO_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
-              elseif string.match (room.info, "rangertrainer") then
+                      elseif string.match (room.info, "rangertrainer") then
                                       special_room = true
                                 WindowDrawImage (win, "rangertrainer", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
-                              WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,RANGER_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
 
-                 end
-                                     end -- if
+                      end
+                       end -- if
                 if uid == current_room and not special_room then
-                                      WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,OUR_ROOM_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-2,miniwin.brush_null)
-end
-end
-			             if uid == current_room and not special_room and tile_mode == "0" then
-                                         WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
-                                         right+2+room.borderpenwidth, bottom+2+room.borderpenwidth, OUR_ROOM_COLOUR.colour,
-                                         room.borderpen, room.borderpenwidth,-2,miniwin.brush_null)		
-end
+                end
+                end
 
-end -- draw_room
+			          if uid == current_room and not special_room and tile_mode == "0" then
+                                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                      right+2+room.borderpenwidth, bottom+2+room.borderpenwidth, OUR_ROOM_COLOUR.colour,
+                                      room.borderpen, room.borderpenwidth,-2,miniwin.brush_null)
+                end
+
+                end -- draw_room
 
 local function changed_room (uid)
 
@@ -1243,50 +1246,50 @@ function draw (uid)
 
       --Handle loading imagetiles
 
-    	      WindowLoadImage (win, "building", "worlds\\plugins\\images\\building.bmp")                       --Terrain 01 BUILDING
+    	    WindowLoadImage (win, "building", "worlds\\plugins\\images\\building.bmp")                       --Terrain 01 BUILDING
     		  WindowLoadImage (win, "town", "worlds\\plugins\\images\\town.bmp")                               --Terrain 02 TOWN
     		  WindowLoadImage (win, "field", "worlds\\plugins\\images\\field.bmp")                             --Terrain 03 FIELD
     		  WindowLoadImage (win, "lightforest", "worlds\\plugins\\images\\lightforest.bmp")                 --Terrain 04 LIGHTFOREST
     		  WindowLoadImage (win, "thickforest", "worlds\\plugins\\images\\thickforest.bmp")                 --Terrain 05 THICKFOREST
     		  WindowLoadImage (win, "darkforest", "worlds\\plugins\\images\\darkforest.bmp")                   --Terrain 06 DARKFOREST
-    	      WindowLoadImage (win, "swamp", "worlds\\plugins\\images\\swamp.bmp")		                       --Terrain 07 SWAMP
+    	    WindowLoadImage (win, "swamp", "worlds\\plugins\\images\\swamp.bmp")		                         --Terrain 07 SWAMP
 
     		  WindowLoadImage (win, "sandy", "worlds\\plugins\\images\\sandy.bmp")                             --Terrain 09 SANDY
     		  WindowLoadImage (win, "mountain", "worlds\\plugins\\images\\mountain.bmp")                       --Terrain 10	MOUNTAIN
-              WindowLoadImage (win, "rock", "worlds\\plugins\\images\\rock.bmp")                               --Terrain 11 ROCK
+          WindowLoadImage (win, "rock", "worlds\\plugins\\images\\rock.bmp")                               --Terrain 11 ROCK
     		  WindowLoadImage (win, "desert", "worlds\\plugins\\images\\desert.bmp")                           --Terrain 12 DESERT
     		  WindowLoadImage (win, "tundra", "worlds\\plugins\\images\\tundra.bmp")                           --Terrain 13 TUNDRA
 
 
     		  WindowLoadImage (win, "beach", "worlds\\plugins\\images\\beach.bmp")                             --Terrain 14 BEACH
-    		  WindowLoadImage (win, "hill", "worlds\\plugins\\images\\hill.bmp") 		                       --Terrain 15 HILL
+    		  WindowLoadImage (win, "hill", "worlds\\plugins\\images\\hill.bmp") 		                           --Terrain 15 HILL
 
 
-    	      WindowLoadImage (win, "ocean", "worlds\\plugins\\images\\ocean.bmp")                             --Terrain 18 OCEAN
-    	      WindowLoadImage (win, "stream", "worlds\\plugins\\images\\stream.bmp")		                   --Terrain 19	STREAM
+    	    WindowLoadImage (win, "ocean", "worlds\\plugins\\images\\ocean.bmp")                             --Terrain 18 OCEAN
+    	    WindowLoadImage (win, "stream", "worlds\\plugins\\images\\stream.bmp")		                       --Terrain 19	STREAM
 
 
 
 
-    		  WindowLoadImage (win, "ice", "worlds\\plugins\\images\\ice.bmp")                             --Terrain 24 ICE
+    		  WindowLoadImage (win, "ice", "worlds\\plugins\\images\\ice.bmp")                                 --Terrain 24 ICE
 
 
-    		  WindowLoadImage (win, "cave", "worlds\\plugins\\images\\cave.bmp")                               --Terrain 27	CAVE
+    		  WindowLoadImage (win, "cave", "worlds\\plugins\\images\\cave.png")                               --Terrain 27	CAVE
     		  WindowLoadImage (win, "city", "worlds\\plugins\\images\\city.bmp")                               --Terrain 28 CITY
 
-    		  WindowLoadImage (win, "wasteland", "worlds\\plugins\\images\\wasteland.bmp")		               --Terrain 30 WASTELAND
+    		  WindowLoadImage (win, "wasteland", "worlds\\plugins\\images\\wasteland.bmp")		                  --Terrain 30 WASTELAND
 
-    		  WindowLoadImage (win, "water", "worlds\\plugins\\images\\water.bmp")		                       --Terrain 32 WATER
+    		  WindowLoadImage (win, "water", "worlds\\plugins\\images\\water.bmp")		                          --Terrain 32 WATER
 
-    		  WindowLoadImage (win, "taiga", "worlds\\plugins\\images\\taiga.bmp")                             --Terrain 34 TAIGA
-
-
+    		  WindowLoadImage (win, "taiga", "worlds\\plugins\\images\\taiga.bmp")                              --Terrain 34 TAIGA
 
 
 
 
 
-    	      WindowLoadImage (win, "bank", "worlds\\plugins\\images\\bank.bmp")                               --Bank Tile
+
+
+    	    WindowLoadImage (win, "bank", "worlds\\plugins\\images\\bank.bmp")                               --Bank Tile
     		  WindowLoadImage (win, "waypoint", "worlds\\plugins\\images\\waypoint.bmp")                       --Waypoint Tile
     		  WindowLoadImage (win, "warriortrainer", "worlds\\plugins\\images\\warriortrainer.bmp")           --Warrior Trainer Tile
     		  WindowLoadImage (win, "thieftrainer", "worlds\\plugins\\images\\thieftrainer.bmp")               --Thief Trainer Tile
@@ -1295,7 +1298,7 @@ function draw (uid)
     		  WindowLoadImage (win, "magetrainer", "worlds\\plugins\\images\\magetrainer.bmp")                 --Mage Trainer Tile
     		  WindowLoadImage (win, "necromancertrainer", "worlds\\plugins\\images\\necromancertrainer.bmp")   --Necromancer Trainer Tile
     		  WindowLoadImage (win, "rangertrainer", "worlds\\plugins\\images\\rangertrainer.bmp")             --Ranger Trainer Tile
-    		  WindowLoadImage (win, "priest", "worlds\\plugins\\images\\priest.bmp")		                   --Priest Tile
+    		  WindowLoadImage (win, "priest", "worlds\\plugins\\images\\priest.bmp")		                       --Priest Tile
     		  WindowLoadImage (win, "alchemyguild", "worlds\\plugins\\images\\alchemyguild.bmp")               --Alchemy Guild Tile
 
 
@@ -1380,7 +1383,8 @@ function draw (uid)
          title_bottom,    -- top
          "ID: "..uid, false, false)
    end
-      if config.SHOW_ROOM_NOTES then
+   if config.SHOW_ROOM_NOTES and room.notes ~= nil and room.notes ~= "" then
+    --  if config.SHOW_ROOM_NOTES then
       Theme.DrawTextBox(win, FONT_ID,
          (config.WINDOW.width - WindowTextWidth (win, FONT_ID, "Note: "..room.notes)) / 2,   -- left
          title_bottom,    -- top
@@ -1741,10 +1745,10 @@ function find (f, show_uid, expected_count, walk, fcb)
   end -- for
 
   -- timing stuff
-  if timing then
+ -- if timing then
     print (string.format ("Time to search %i rooms = %0.3f seconds, search depth = %i",
                           count, end_time - start_time, depth))
-  end -- if
+ -- end -- if
 
   if found_count == 0 then
     mapprint ("No matches.")
@@ -2094,7 +2098,7 @@ function mouseup_change_show_tiles (flags, hotspot_id)
 	  CallPlugin("dd07d6dbe73fe0bd02ddb63d", "SetVariable", "tile_mode", "0")
 	  SaveState()
 	  draw (current_room)
-	  
+
    else
       config.SHOW_TILES = true
 	 CallPlugin("dd07d6dbe73fe0bd02ddb63d", "SetVariable", "tile_mode", "1")

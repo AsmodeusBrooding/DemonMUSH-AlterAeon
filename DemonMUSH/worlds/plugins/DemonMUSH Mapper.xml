@@ -108,7 +108,7 @@ mapper.gotoNextResult(Trim("%1"))
   </alias>
  <alias
    match="stop"
-   enabled="y"
+   enabled="n"
    sequence="100"
    script="mapper.cancel_speedwalk"
   >
@@ -1685,6 +1685,11 @@ function map_find (name, line, wildcards)
       v.description = ""
     end -- if no description
 
+    -- don't want nil descriptions
+    if not v.name then
+      v.name = ""
+    end -- if no description
+	
     if string.find (v.name:lower (), fixed_target) or
        string.find (v.description:lower (), fixed_target) then
       matches [k] = true
@@ -1790,7 +1795,7 @@ function note_find (name, line, wildcards)
   -- see if nearby
   mapper.find (
     function (uid)
-      local room = matches [uid]
+      local room = matches [uid] or nil
       if room then
         matches [uid] = nil
       end -- if
@@ -2059,6 +2064,15 @@ function OnPluginInstall ()
       util.print("{RD{re{Rm{ro{Rn{YM{yU{YS{yH {RG{Yr{Ga{Cp{Bh{Mi{mc{Ra{Yl {x238Mapper installed: {Gv" .. version)
 
 end -- OnPluginInstall
+
+
+function OnPluginDisable()
+	WindowDelete(mapper.win)
+end
+
+function OnPluginClose()
+	WindowDelete(mapper.win)
+end
 
 ------------------------------------------------------------------------------------------------------------
 ---------------------------------- SUPER MAPPER HELP PAGES HERE --------------------------------------------

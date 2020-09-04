@@ -1,0 +1,60 @@
+DemonMUSH Changelog: September 5th, 2020
+
+~R~HSound
+~Y------------------------------------------------------------------------ 
+~WAdded MSP support and a new sound plugin which automatically downloads
+/and plays msp sounds from the Alter Aeon website.
+I've set a cap at 1.4MB for any single file, so let me know if you get
+a warning about it trying to download something bigger. I'm not currently
+aware of the largest file size for the sound files. The files are in wav
+format by default, which are typically larger than mp3 or ogg.
+~Y------------------------------------------------------------------------ 
+
+~R~HMapper 
+~Y------------------------------------------------------------------------ 
+~WImproved Cave Terrain icon.
+General cleanup of code to prepare for some awesome new features.
+Added code to toggle a display of notes on the map window.
+~Y------------------------------------------------------------------------ 
+
+~R~HString_Handler 
+~Y------------------------------------------------------------------------ 
+~WAdded more gags to reduce spammy kxwt information.
+~Y------------------------------------------------------------------------ 
+
+~R~HEXP Tracker 
+~Y------------------------------------------------------------------------ 
+~WAdded on/off toggle, use dxp on or dxp off instead of just dxp, so you 
+don't accidentally flip it off.
+
+Improved overall aesthetics massively.
+~Y------------------------------------------------------------------------ 
+
+~R~HDiscord
+~Y------------------------------------------------------------------------ 
+~WWe can now chat with people on Discord using the Discord mud channel.
+%con discord to be able to talk with people off the mud, and connect to
+our server at https://discord.gg/tqngxFp to be able to talk with people
+on the mud from off the mud!
+
+I'm thinking about making the auction channel viewable from off the game.
+I have added the REBOOT IMPENDING message as well. Let me know what kind
+of messages/alerts you might want to see on discord while you're off the 
+mud! Some have recommended fishing derby and clan wars. Please weigh in!
+~Y------------------------------------------------------------------------ 
+
+~R~HCommunication Catcher 
+~Y------------------------------------------------------------------------ 
+~WRemoved channel prefix [] from showing up in the chat window.
+This prefix is required to help pick up channels with alternative
+formatting, but has now been gagged.
+Improved regular expression to not pick up tells from shopkeepers, or
+says from random mobs.
+Updated the 'chat help' and 'commcheck' commands massively, but this
+is still under construction. This will end up allowing you to assign
+certain channels to certain tabs, and/or mute one, many, or all channels
+from the main output, so that they only appear in the chat window.
+This would help to reduce spam from your main output window.
+~Y------------------------------------------------------------------------ 
+
+

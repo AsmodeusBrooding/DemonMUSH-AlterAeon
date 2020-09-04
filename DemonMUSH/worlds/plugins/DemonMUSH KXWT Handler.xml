@@ -141,6 +141,22 @@ omit_from_output="y"
  sequence="100"
  >
  </trigger>
+ <trigger
+  enabled="y"
+  match="kxwt_brew_start"
+  omit_from_output="y"
+  omit_from_log="y"
+  sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   match="kxwt_context"
+   omit_from_output="y"
+   omit_from_log="y"
+   sequence="100"
+   >
+   </trigger>
 <trigger
  enabled="y"
  match="Set it to NULL to delete."
@@ -310,6 +326,15 @@ omit_from_output="y"
    sequence="100"
   >
   </trigger>
+    <trigger
+   enabled="y"
+   match="^kxwt_rvnum -(\d+)"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  ><send>util.print("{x238[{YLooking out from where you are, you see...{x238]")</send>
+  </trigger>
   <trigger
    enabled="y"
    match="kxwt_myname *"
@@ -318,7 +343,7 @@ omit_from_output="y"
    send_to="14"
    sequence="100"
   >
-<send>Send("localecho DemonMUSH v3.02b "..uid)</send>
+<send>Send("localecho DemonMUSH v3.13b" ..uid)</send>
   </trigger>
     <trigger
    enabled="y"
@@ -338,7 +363,7 @@ keep_evaluating="y"
    send_to="14"
    sequence="100"
   >
-<send>Send("reply DemonMUSH v3.02b "..uid)</send>
+<send>Send("reply DemonMUSH v3.13b "..uid)</send>
   </trigger>
 <trigger
    enabled="y"
@@ -349,7 +374,7 @@ keep_evaluating="y"
    send_to="14"
    sequence="100"
   >
-<send>Send("reply DemonMUSH v3.02b "..uid)</send>
+<send>Send("reply DemonMUSH v3.13b "..uid)</send>
   </trigger>
 <trigger
    enabled="y"
@@ -360,12 +385,12 @@ keep_evaluating="y"
    send_to="14"
    sequence="100"
   >
-<send>Send("reply DemonMUSH v3.02b "..uid)
+<send>Send("reply DemonMUSH v3.13b "..uid)
 print("the uuid is: "..uid)</send>
   </trigger>
 <trigger
    enabled="y"
-   match="You reply to *, 'DemonMUSH v3.02b *'"
+   match="You reply to *, 'DemonMUSH v3.13b *'"
    omit_from_output="y"
    regexp="n"
    send_to="14"
@@ -380,17 +405,43 @@ print("the uuid is: "..uid)</send>
   >
   <send>set kxwt on
 set cprefix ~R~H[]~O
+set msp on
 l</send>
   </trigger>
+  <trigger
+   enabled="y"
+   match="!!SOUND(* U=http://www.alteraeon.com/soundpack/wav_v1/ X=2.0)"
+   omit_from_output="y"
+   omit_from_log="y"
+   sequence="100"
+   >
+   </trigger>
+   <trigger
+    enabled="y"
+    match="MSP mode is now enabled."
+    omit_from_output="y"
+    omit_from_log="y"
+    sequence="100"
+    >
+    </trigger>
 <trigger
  enabled="y"
- match="kxwt_idle"
+ match="kxwt_event microlevel * *"
  omit_from_output="y"
  omit_from_log="y"
  sequence="100"
  >
-<send>l</send>
+<send>show cost %2</send>
  </trigger>
+ <trigger
+  enabled="y"
+  match="kxwt_idle"
+  omit_from_output="y"
+  omit_from_log="y"
+  sequence="100"
+  >
+ <send>l</send>
+  </trigger>
     <trigger
    enabled="y"
    match="kxwt_nocast"
@@ -731,7 +782,7 @@ ColourNote("lime", "black", "---------------------------")
 
 
 -----------------------------------------------------------------------------------
--- SOUNDS SECTION 
+-- SOUNDS SECTION
 -----------------------------------------------------------------------------------
   <aliases>
   <alias
@@ -751,7 +802,7 @@ SetVariable("volume", volume)
 util.print("{YVolume changed to {R" .. (GetVariable("volume") or 100) .. "{Y percent.")
    SaveState()
 </send>
-</alias> 
+</alias>
 <alias
  enabled="y"
  match="show volume"
@@ -771,7 +822,7 @@ keep_evaluating="y"
  send_to="14"
  >
 <send>
-Sound ("sounds/tell.wav") 
+Sound ("sounds/tell.wav")
 </send>
  </trigger>
  <trigger
@@ -781,7 +832,7 @@ Sound ("sounds/tell.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/tell.wav") 
+Sound ("sounds/tell.wav")
 </send>
  </trigger>
  <trigger
@@ -791,7 +842,7 @@ Sound ("sounds/tell.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/Purchase.wav") 
+Sound ("sounds/Purchase.wav")
 </send>
  </trigger>
  <trigger
@@ -801,7 +852,7 @@ Sound ("sounds/Purchase.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/Item.wav") 
+Sound ("sounds/Item.wav")
 </send>
  </trigger>
  <trigger
@@ -813,7 +864,7 @@ Sound ("sounds/Item.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/Walk.wav") 
+Sound ("sounds/Walk.wav")
 </send>
  </trigger>
  <trigger
@@ -823,7 +874,7 @@ Sound ("sounds/Walk.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/demolishleap.wav") 
+Sound ("sounds/demolishleap.wav")
 </send>
  </trigger>
  <trigger
@@ -833,7 +884,7 @@ Sound ("sounds/demolishleap.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/door.wav") 
+Sound ("sounds/door.wav")
 </send>
  </trigger>
  <trigger
@@ -843,7 +894,7 @@ Sound ("sounds/door.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/door.wav") 
+Sound ("sounds/door.wav")
 </send>
  </trigger>
  <trigger
@@ -853,7 +904,7 @@ Sound ("sounds/door.wav")
  send_to="14"
  >
 <send>
-Sound ("sounds/cleave.wav") 
+Sound ("sounds/cleave.wav")
 </send>
  </trigger>
  <trigger
@@ -864,7 +915,7 @@ regexp="n"
  send_to="14"
  >
 <send>
-Sound ("sounds/random.wav") 
+Sound ("sounds/random.wav")
 </send>
  </trigger>
  <trigger
@@ -875,7 +926,7 @@ regexp="n"
  send_to="14"
  >
 <send>
-Sound ("sounds/rottingsphere.wav") 
+Sound ("sounds/rottingsphere.wav")
 </send>
  </trigger>
 <trigger
@@ -886,7 +937,7 @@ regexp="n"
  send_to="14"
  >
 <send>
-Sound ("sounds/cackle.wav") 
+Sound ("sounds/cackle.wav")
 </send>
  </trigger>
 <trigger
@@ -897,7 +948,7 @@ regexp="n"
  send_to="14"
  >
 <send>
-Sound ("sounds/cackle.wav") 
+Sound ("sounds/cackle.wav")
 </send>
  </trigger>
 <trigger
@@ -908,7 +959,7 @@ regexp="n"
  send_to="14"
  >
 <send>
-Sound ("sounds/sancfall.wav") 
+Sound ("sounds/sancfall.wav")
 </send>
  </trigger>
  <trigger
@@ -972,7 +1023,7 @@ if musicPlaying == false then
 		end -- if musicPlaying</send></trigger>
 </triggers>
 ------------------------------------------------------------------------------------
--- ALIASES SECTION 
+-- ALIASES SECTION
 ------------------------------------------------------------------------------------
 
    <aliases>
@@ -1080,7 +1131,7 @@ Send("ping")
 </alias>
 
   </aliases>
-  
+
 
 
 <!--  Script  -->
@@ -1115,7 +1166,7 @@ end
 function OnPluginSaveState ()
   SetVariable("id",uid)
 end
-          
+
 
 function random(num1, num2)
 	math.randomseed(os.time())
@@ -1126,7 +1177,7 @@ function random(num1, num2)
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
----- HELP PAGES SECTION 
+---- HELP PAGES SECTION
 -------------------------------------------------------------------------------------------------------------------------------
 
 function demonhelp()
