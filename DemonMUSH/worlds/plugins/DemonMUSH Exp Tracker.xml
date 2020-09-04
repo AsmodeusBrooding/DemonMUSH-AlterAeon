@@ -76,7 +76,7 @@
  <!--  Aliases  -->
  <aliases>
   <alias
-   match="^dxp (on|off)$"
+   match="^dxp on$"
    enabled="y"
    send_to="12"
    regexp="y"
@@ -90,30 +90,45 @@
 			--ColourNote ("darkviolet", "black", "You begin tracking experience points.")
 			timeStart = os.time()
 		else
-			util.print("")
+      util.print("")
+      util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099You are already tracking XP.")
+	   	end</send></alias>
+      <alias
+       match="^dxp off$"
+       enabled="y"
+       send_to="12"
+       regexp="y"
+       ignore_case="y"
+       sequence="100"
+      >
+      <send>
+      if expTracker == true then
+      util.print("")
       util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099You stop tracking XP.")
-			--ColourNote ("darkviolet", "black", "You stop tracking experience points.")
-			timeCurrent = os.time()
-			timeFinish = os.difftime(timeCurrent, timeStart)
-			Execute("show dxp")
+      --ColourNote ("darkviolet", "black", "You stop tracking experience points.")
+      timeCurrent = os.time()
+      timeFinish = os.difftime(timeCurrent, timeStart)
+      Execute("show dxp")
       expTracker = false
-    	timeStart = 0
-    	timeCurrent = 0
-    	timeFinish = 0
-    	expTableLength = 0
-    	expGained = 0
-    	expTaken = 0
-    	expLastKnown = 0
-    	playerMicroGain = 0
-    	playerLvlGain = 0
-    	playerPracGain = 0
-    	playerDeaths = 0
-    	totalSecs = 0
-    	totalMins = 0
-    	totalHrs = 0
-    	notifySpent = false
-    	notifyTaken = false
-		end</send></alias>
+      timeStart = 0
+      timeCurrent = 0
+      timeFinish = 0
+      expTableLength = 0
+      expGained = 0
+      expTaken = 0
+      expLastKnown = 0
+      playerMicroGain = 0
+      playerLvlGain = 0
+      playerPracGain = 0
+      playerDeaths = 0
+      totalSecs = 0
+      totalMins = 0
+      totalHrs = 0
+      notifySpent = false
+      notifyTaken = false
+    else
+    util.print("{x238[{RD{rE{RM{rO{RN{x238] {x238You aren't currently tracking XP.")
+    end</send></alias>
   <alias
    match="show dxp"
    enabled="y"
