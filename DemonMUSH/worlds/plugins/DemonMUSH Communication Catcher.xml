@@ -255,7 +255,7 @@
 <trigger
    enabled="y"
    name="send_tell"
-   match="You tell (A terrible winged Demon|.*), '.*'"
+   match="You tell (?!the group)(A terrible winged Demon|.*), '.*'"
    regexp="y"
    script="tells"
    keep_evaluating="y"
