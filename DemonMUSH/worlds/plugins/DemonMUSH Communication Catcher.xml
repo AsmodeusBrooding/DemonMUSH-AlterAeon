@@ -485,14 +485,14 @@ function auction (name, line, wildcards, styles)
 end -- untagged info
 
 function regularchan (name, line, wildcards, styles)
-noprefix = string.gsub(StylesToColours(styles), "{R%[%]", "")
+noprefix = string.gsub(StylesToColours(styles), "{w%[%]", "")
     -- print ("name = " .. name)
     tab = GetVariable("regularchan_tab") or "1"
    a, b = CallPlugin("b555825a4a5700c35fa80780", "storeFromOutside", "[" .. os.date("%b %d, %H:%M:%S") .. "] " .. noprefix, tab)
 end -- untagged info
 
 function circlechan (name, line, wildcards, styles)
-  noprefix = string.gsub(StylesToColours(styles), "{R%[%]", "")
+  noprefix = string.gsub(StylesToColours(styles), "{w%[%]", "")
       -- print ("name = " .. name)
       tab = GetVariable("regularchan_tab") or "1"
      a, b = CallPlugin("b555825a4a5700c35fa80780", "storeFromOutside", "[" .. os.date("%b %d, %H:%M:%S") .. "] " .. noprefix, tab)

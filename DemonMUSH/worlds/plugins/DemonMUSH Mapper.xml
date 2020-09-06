@@ -901,7 +901,9 @@ function updateRoomInfo(name, line, wildcards)
    ["armorshop"]="armorshop", ["petshop"]="petshop", ["itemshop"]="itemshop", 
    ["foodshop"]="foodshop", ["tavern"]="tavern", ["morgue"]="morgue", ["quest"]="quest", 
    ["fountain"]="fountain", ["gato"]="gato", ["moti"]="moti", ["inn"]="inn",
-   ["owlite"]="owlite", ["enchanter"]="enchanter", ["mage"]="mage"
+   ["owlite"]="owlite", ["enchanter"]="enchanter", ["mage"]="mage", ["warriortrainer"] = "warriortrainer",
+   ["necromancertrainer"] = "necromancertrainer", ["clerictrainer"] = "clerictrainer", ["magetrainer"] = "magetrainer",
+   ["druidtrainer"] = "druidtrainer", ["thieftrainer"] = "thieftrainer"
    }
    
    local roomtype, room, roomuid, matchFound = wildcards[1], wildcards[2], current_room or 0, false

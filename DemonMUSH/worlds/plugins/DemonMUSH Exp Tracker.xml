@@ -275,7 +275,7 @@
                     elseif notifySpent == false and notifyTaken == true then
                         util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracking XP for "..timeFinish.." seconds and gained "..expGained.." experience. You have lost "..expTaken.." experience during this time.")
                     else
-                        util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracked XP for "..timeFinish.." seconds and gained a total of {Y"..expGained.."{x099 experience.")
+                        util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracked XP for "..timeFinish.." seconds and gained a total of {Y"..trunc(expGained).."{x099 experience.")
                     end
                 elseif timeFinish &lt; 3600 then
                     totalMins = math.floor(timeFinish/60)
@@ -288,7 +288,7 @@
                     elseif notifySpent == false and notifyTaken == true then
                         util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracking XP for "..totalMins.." minutes, "..totalSecs.." seconds and gained "..expGained.." experience. You have lost "..expTaken.." experience during this time.")
                     else
-                        util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracked XP for "..totalMins.." minutes, "..totalSecs.." seconds and gained a total of {Y"..expGained.."{x099 experience.")
+                        util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracked XP for "..totalMins.." minutes, "..totalSecs.." seconds and gained a total of {Y"..trunc(expGained).."{x099 experience.")
                     end
                 elseif timeFinish &gt; 3599 then
                     totalSecs = math.fmod(timeFinish, 3600)
@@ -302,7 +302,7 @@
                     elseif notifySpent == false and notifyTaken == true then
                         util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracking XP for "..totalHrs.." hours,  "..totalMins.." minutes and gained "..expGained.." experience. You have lost "..expTaken.." experience during this time.")
                     else
-                        util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracked XP for "..totalHrs.." hours and "..totalMins.." minutes and gained a total of {Y"..expGained.."{x099 experience.")
+                        util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Tracked XP for "..totalHrs.." hours and "..totalMins.." minutes and gained a total of {Y"..trunc(expGained).."{x099 experience.")
                     end
                 end
             else
@@ -367,6 +367,54 @@
 ----------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------
+    function trunc(n)
+n=tostring(n)
+if (#n< 5) then
+return n
+elseif (#n == 5) then
+return string.sub(n, 1, 2).."."..string.sub(n, 1,2).."k"
+elseif (#n == 6) then
+return string.sub(n, 1, 3).."."..string.sub(n, 1,2).."k"
+elseif (#n == 7) then
+if (string.sub(n, 2, 2) == "0") then
+return string.sub(n, 1,1).." mill"
+else
+return string.sub(n, 1, 1).."."..string.sub(n, 1,2).."mill"
+end
+elseif (#n == 8) then
+if (string.sub(n, 3, 3) == "0") then
+return string.sub(n, 1,2).." mill"
+else
+return string.sub(n, 1, 2).."."..string.sub(n, 1,2).."mill"
+end
+elseif (#n == 9) then
+if (string.sub(n, 4, 4) == "0") then
+return string.sub(n, 1,3).." mill"
+else
+return string.sub(n, 1, 3).."."..string.sub(n, 1,2).."mill"
+end
+elseif (#n == 10) then
+if (string.sub(n, 2, 2) == "0") then
+return string.sub(n, 1,1).." bill"
+else
+return string.sub(n, 1, 1).."."..string.sub(n, 2,2).."bill"
+end
+elseif (#n == 11) then
+if (string.sub(n, 3, 3) == "0") then
+return string.sub(n, 1,2).." bill"
+else
+return string.sub(n, 1, 2).."."..string.sub(n, 3,3).."bill"
+end
+elseif (#n == 12) then
+if (string.sub(n, 4, 4) == "0") then
+return string.sub(n, 1,3).." bill"
+else
+return string.sub(n, 1, 3).."."..string.sub(n, 4,4).."bill"
+end
+end 
+end -- trunc
+
+
 	function OnPluginInstall()
     util.print("{x238[{RD{rE{RM{rO{RN{x238] {x099Exp Tracker has been installed. Type '{Ydxp help{x099' to learn more.")
 		--ColourNote ("white", "indigo", "DemonMUSH_ExpTracker has been installed. Type 'dxp help' to learn more.")

@@ -202,6 +202,7 @@ UNKNOWN_ROOM_COLOUR           = { name = "Unknown room",     colour =  ColourNam
 DIFFERENT_AREA_COLOUR         = { name = "Another area",     colour =  ColourNameToRGB "#ff0000"}
 PK_BORDER_COLOUR              = { name = "PK border",        colour =  ColourNameToRGB "red"}
 SHOP_FILL_COLOUR              = { name = "Shop",             colour =  ColourNameToRGB "#ffad2f"}
+REGULAR_FILL_COLOUR           = { name = "Regular",          colour =  ColourNameToRGB "white"}
 WAYPOINT_FILL_COLOUR          = { name = "waypoint",         colour =  ColourNameToRGB "lime"}
 TRAINER_FILL_COLOUR           = { name = "Trainer",          colour =  ColourNameToRGB "#9acd32"}
 QUESTOR_FILL_COLOUR           = { name = "Questor",          colour =  ColourNameToRGB "deepskyblue"}
@@ -925,6 +926,44 @@ local function draw_room (uid, path, x, y)
                                 WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
                                       right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,RANGER_TRAINER_FILL_COLOUR.colour,
                                       room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
+                                         special_room = true
+					   elseif string.match (room.info, "weaponshop") then
+		 	                    WindowDrawImage (win, "weaponshop", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+										 --WindowDrawImageAlpha (win, "weaponshop", left, top, right, bottom)
+				                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                         right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,REGULAR_FILL_COLOUR.colour,
+                                         room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
+                                         room.fillbrush = 8  -- medium pattern
+	                   elseif string.match (room.info, "armorshop") then
+                                         special_room = true
+		 	                    WindowDrawImage (win, "armorshop", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+										 --WindowDrawImageAlpha (win, "armorshop", left, top, right, bottom)
+				                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                         right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,REGULAR_FILL_COLOUR.colour,
+                                         room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
+                                         room.fillbrush = 8  -- medium pattern
+		               elseif string.match (room.info, "petshop") then
+                                         special_room = true
+		 	                             --WindowDrawImage (win, "petshop", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+						        WindowDrawImageAlpha (win, "petshop", left, top, right, bottom)
+				                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                         right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,REGULAR_FILL_COLOUR.colour,
+                                         room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
+                                         room.fillbrush = 8  -- medium pattern
+					   elseif string.match (room.info, "itemshop") then
+                                         special_room = true
+		 	                    WindowDrawImage (win, "itemshop", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+				                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                         right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,REGULAR_FILL_COLOUR.colour,
+                                         room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
+                                         room.fillbrush = 8  -- medium pattern		
+					   elseif string.match (room.info, "foodshop") then
+                                         special_room = true
+		 	                    WindowDrawImage (win, "foodshop", left, top, right, bottom, miniwin.image_stretch)  -- stretch to fill
+				                WindowCircleOp (win, miniwin.circle_rectangle, left-2-room.borderpenwidth, top-2-room.borderpenwidth,
+                                         right+2+room.borderpenwidth, bottom+2+room.borderpenwidth,REGULAR_FILL_COLOUR.colour,
+                                         room.borderpen, room.borderpenwidth,-1,miniwin.brush_null)
+                                         room.fillbrush = 8  -- medium pattern		
 
                       end
                        end -- if
@@ -1289,7 +1328,7 @@ function draw (uid)
 
 
 
-    	    WindowLoadImage (win, "bank", "worlds\\plugins\\images\\bank.bmp")                               --Bank Tile
+    	      WindowLoadImage (win, "bank", "worlds\\plugins\\images\\bank.bmp")                               --Bank Tile
     		  WindowLoadImage (win, "waypoint", "worlds\\plugins\\images\\waypoint.bmp")                       --Waypoint Tile
     		  WindowLoadImage (win, "warriortrainer", "worlds\\plugins\\images\\warriortrainer.bmp")           --Warrior Trainer Tile
     		  WindowLoadImage (win, "thieftrainer", "worlds\\plugins\\images\\thieftrainer.bmp")               --Thief Trainer Tile
@@ -1300,6 +1339,12 @@ function draw (uid)
     		  WindowLoadImage (win, "rangertrainer", "worlds\\plugins\\images\\rangertrainer.bmp")             --Ranger Trainer Tile
     		  WindowLoadImage (win, "priest", "worlds\\plugins\\images\\priest.bmp")		                       --Priest Tile
     		  WindowLoadImage (win, "alchemyguild", "worlds\\plugins\\images\\alchemyguild.bmp")               --Alchemy Guild Tile
+	          WindowLoadImage (win, "weaponshop", "worlds\\plugins\\images\\weaponshop.png")                   --Weapon Shop Tile				  
+	          WindowLoadImage (win, "armorshop", "worlds\\plugins\\images\\armorshop.png")                     --Armor Shop Tile	
+	          WindowLoadImage (win, "petshop", "worlds\\plugins\\images\\petshop.png")                         --Pet Shop Tile			  
+	          WindowLoadImage (win, "itemshop", "worlds\\plugins\\images\\itemshop.png")                       --Item Shop Tile		
+	          WindowLoadImage (win, "foodshop", "worlds\\plugins\\images\\foodshop.png")                       --Food Shop Tile	
+	          WindowLoadImage (win, "lightshop", "worlds\\plugins\\images\\lightshop.png")                     --Light Shop Tile					  
 
 
 
