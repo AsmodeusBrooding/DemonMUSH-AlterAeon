@@ -255,7 +255,7 @@
 <trigger
    enabled="y"
    name="send_tell"
-   match="You tell (?!the group)(A terrible winged Demon|.*), '.*'"
+   match="You tell (?!the group|the clan)(A terrible winged Demon|.*), '.*'"
    regexp="y"
    script="tells"
    keep_evaluating="y"
@@ -265,7 +265,7 @@
 <trigger
    enabled="y"
    name="get_reply"
-   match="^(A terrible winged Demon|Rubedo Souless|^\w+) * replies to you, '.*'$"
+   match="^(A terrible winged Demon|Rubedo Souless|^\w+) replies to you, '.*'$"
    regexp="y"
    script="tells"
    sequence="100"

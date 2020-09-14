@@ -99,11 +99,11 @@ USAGE:
 <aliases>
 
 <alias
-   match="resetaard"
+   match="resetdemon"
    enabled="y"
    sequence="100"
    ignore_case="y"
-   script="reset_aard"
+   script="reset_demon"
 ></alias>
 
 <alias
@@ -133,7 +133,7 @@ require "gmcphelper"
 require "text_rect"
 require "scrollbar"
 
-dofile(GetPluginInfo(GetPluginID(), 20) .. "aardwolf_colors.lua")
+dofile(GetPluginInfo(GetPluginID(), 20) .. "plugin_colors.lua")
 
 local gap = 1
 MAX_LINES = 10000 -- how many lines to store in scrollback
@@ -377,7 +377,7 @@ function removeTab()
    setTab(current_tab)
 end
 
-function reset_aard()
+function reset_demon()
    font_name = default_font_name
    font_size = default_font_size
    WindowPosition(win, default_x, default_y, 0, 18)
@@ -387,10 +387,6 @@ function reset_aard()
    OnPluginInstall()
 end
 
-function OnPluginListChanged ()
-   dofile "lua/aard_requirements.lua"
-   CallPlugin ("55616ea13339bc68e963e1f8", "enable_hiding", true, GetPluginID())
-end
 
 function OnPluginInstall ()
    init()

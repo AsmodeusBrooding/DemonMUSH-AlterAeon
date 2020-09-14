@@ -405,7 +405,7 @@ print("the uuid is: "..uid)</send>
   >
   <send>set kxwt on
 set cprefix ~R~H[]~O
-set msp on
+--set msp on
 l</send>
   </trigger>
   <trigger
